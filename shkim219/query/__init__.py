@@ -1592,17 +1592,53 @@ def delete(filename):
         else:
             toCheck = numberofentries - counter
         deletehelper(filename, toCheck, counter)
+        counter += toCheck
 
 
 def deletehelper(filename, no, current):
     query = gql(
         """
                 mutation {
-  delete(type: Cell, arcql: "filename = \'""" + filename + """\' AND row IN [ """ + str(current) + ", " + str(current+no) + """))
+  delete(type: Cell, arcql: "filename = \'""" + filename + """\' AND row IN [""" + str(current) + ", " + str(current+no) + """)")
 }
                         """
     )
+
+    deletehelper2(filename, no)
+
     return client.execute(query)
+
+
+def deletehelper2(filename, no):
+    numentries = getEntries(filename)
+    numleft = numentries - no
+    if(numleft > 0):
+        query = gql(
+            """
+            mutation UpdateNumEntries{
+                upsert(values: {
+                    Filename: [
+                        hypi: {id: \"""" + filename + """\"},
+                        csvname: \"""" + filename + """\",
+                        totalnumber: """ + str(numleft) + """
+                    ]
+                }
+            }
+            """
+
+        )
+    else:
+        query = gql(
+            """
+            mutation {
+                delete(type: Filename, arcql: "hypi.id = \'""" + filename + """\')
+            }
+            """
+
+        )
+
+    return client.execute(query)
+
 
 
 def createcell(no, arr, filename):
