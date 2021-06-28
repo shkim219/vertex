@@ -11,7 +11,6 @@ import json
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
-
 skopy_data = 'C:/Users/paulk/Documents/features.csv'
 
 headers = {'Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJoeXBpLmxvZ2luIjp0cnVlLCJoeXBpLnVzZXJuYW1lIjoic2hraW0yMTlAYnUuZWR1IiwiaHlwaS5lbWFpbCI6InNoa2ltMjE5QGJ1LmVkdSIsImF1ZCI6IjAxRjdWNDE3MFpERFNFWUY4OFZaVDVaNEdGIiwiaWF0IjoxNjIzMzQ3MTUyLCJleHAiOjE2MjU5MzkxNTIsInN1YiI6IjAxRjdWNDE3MFo0R0NDWllSNVcyTTBKUTA0IiwibmJmIjoxNjIzMzQ3MTUyfQ.bSZIit1RSx7J-h_Eckn2hZrN0teL_XTpZ7vp60fhY3ZKmsl5mL5LtLcOm6FuISPTb5822YYDUOAx0Pg8bW0tThMbZItkQezfv98WpbAvQfQIv8ehrlX9r1RihZ5e5KowiQvHeLO20A-hftq1WWL8wSZTMcqJ5vOjluo6sBeM57HuPcH_MMsrNUonpFXt8YvDKzEETGYm1WJZMoqJMpCJPVd7PT6sDvVniPOdEoszfXuOC3oC4TQqa_h9K10dAxo1vaiVRbMifctURFgN5rn6kSo7bSc99SU7xXTjGUjpTJi0p9edgg1XGWMKZciMFV4xfpJuClcm840f_e_5XK6TSA',
@@ -421,7 +420,7 @@ def create_cell(file):
     df = pd.read_csv(file)
     df.dropna(how="all", inplace=True)
     for i in range(len(df)):
-        createcell(i, df.iloc[i], file)
+        createcell((i+1), df.iloc[i], file)
 
 
 def getFiles():
