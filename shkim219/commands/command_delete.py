@@ -1,10 +1,10 @@
 import click
-import test
+import shkim219.query
 
 @click.command()
 @click.argument('filename', nargs=1, type=click.Path(exists=True))
-def insert(filename):
-    test.create_cell(filename)
+def delete(filename):
+    shkim219.query.delete(filename)
 
 if __name__ == '__main__':
-    insert()
+    delete()

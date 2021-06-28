@@ -1,9 +1,9 @@
 import click
-import test
+import shkim219.query
 
 @click.command()
 def get_files():
-    test.getFiles()
+    print(shkim219.query.getFiles())
 
 if __name__ == '__main__':
     get_files()

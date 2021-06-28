@@ -27,7 +27,7 @@ class Command(click.MultiCommand):
             if sys.version_info[0] == 2:
                 name = name.encode("ascii", "replace")
 
-            name = "test.commands.command_" + name
+            name = "shkim219.commands.command_" + name
 
             mod = __import__(name, None, None, ["command"])
         except ImportError:
@@ -41,7 +41,7 @@ class Context:
         self.image = None
 
 
-context_settings = {"auto_envvar_prefix": "TEST"}
+context_settings = {"auto_envvar_prefix": "shkim219"}
 
 pass_context = click.make_pass_decorator(Context, ensure=True)
 
