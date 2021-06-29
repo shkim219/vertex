@@ -1514,7 +1514,7 @@ def getEntries(filename):
 def retrievecells(filename):
     cellarray = []
     numberofentries = getEntries(filename)
-    counter = 0
+    counter = 1
     while(counter < numberofentries):
         if(numberofentries - counter >= 3):
             toCheck = 3
@@ -1585,7 +1585,7 @@ def createFile(inputfile, outputfile):
 
 def delete(filename):
     numberofentries = getEntries(filename)
-    counter = 0
+    counter = 1
     while (counter < numberofentries):
         if (numberofentries - counter >= 3):
             toCheck = 3
