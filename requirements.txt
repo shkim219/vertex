@@ -9,3 +9,4 @@ setuptools~=50.3.0
 lightgbm~=3.1.1
 mlflow~=1.17.0
 scikit-learn~=0.24.2
+chardet~=3.0.4
