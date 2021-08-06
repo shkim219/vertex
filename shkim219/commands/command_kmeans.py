@@ -4,18 +4,16 @@ import shkim219.query2
 import os
 
 @click.command("kmeans")
-def command():
-    cd_back = os.system("cd ..")
-    cd_back = os.system("cd ..")
-    cd_install = os.system("wget https://mirrors.advancedhosters.com/apache//ignite/2.10.0/apache-ignite-2.10.0-bin.zip")
-    cd_unzip = os.system("tar -xvf apache-ignite-2.10.0-bin.zip")
-    cd_in = os.system("cd skopytest")
-    cd_in = os.system("cd src")
-    cd_in = os.system("cd main")
-    cd_in = os.system("cd java")
-    cd_in = os.system("cd kmeans")
-    cd_compile = os.system("javac Client.java")
-    cd_run = os.system("java Client")
+@click.argument('filename', nargs=1, type=click.Path())
+def command(filename):
+    curpath = os.path.abspath(os.getcwd())
+    print(curpath)
+    cd_in = os.system("cd " + curpath + "\\vertex\\skopytest")
+    cd_execute = os.system("mvn exec:java -Dexec.mainclass=\"kmeans.Client\" -Dexec.args=\"" + filename + " " + curpath + "\\vertex\\shkim219\\query\\__init__.py\"")
+    shkim219.query2.create_cell(curpath + "\\vertex\\skopytest\\" + filename[0,filename.index(".csv")],"kmeans")
+    
+
+    
 
 if __name__ == '__main__':
     command()
