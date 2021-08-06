@@ -1,6 +1,5 @@
 import click
 import shkim219.query
-import shkim219.query2
 import os
 
 @click.command("maven")

@@ -20,44 +20,44 @@ transport = AIOHTTPTransport(url='https://api.hypi.app/graphql', headers=headers
 client = Client(transport=transport, fetch_schema_from_transport=True)
 
 
-def retrievecells(filename):
-    fieldnames = ['area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
-                  'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
-                  'inertia_tensor_1_0', 'inertia_tensor_1_1', 'inertia_tensor_eigen_values_0', 'inertia_tensor_eigen_values_1', 'intensity_integrated', 'intensity_maximum', 'intensity_mean', 'intensity_median', 'intensity_median_absolute_deviation',
-                  'intensity_minimum', 'intensity_quartile_1', 'intensity_quartile_2', 'intensity_quartile_3', 'intensity_standard_deviation', 'label', 'major_axis_length', 'minor_axis_length', 'moments_central_0_0', 'moments_central_0_1',
-                  'moments_central_0_2', 'moments_central_1_0', 'moments_central_1_1', 'moments_central_1_2', 'moments_central_2_0', 'moments_central_2_1', 'moments_central_2_2', 'moments_hu_0', 'moments_hu_1', 'moments_hu_2', 'moments_hu_3',
-                  'moments_hu_4', 'moments_hu_5', 'moments_hu_6', 'moments_hu_weighted_0', 'moments_hu_weighted_1', 'moments_hu_weighted_2', 'moments_hu_weighted_3', 'moments_hu_weighted_4', 'moments_hu_weighted_5', 'moments_hu_weighted_6',
-                  'moments_normalized_0_0', 'moments_normalized_0_1', 'moments_normalized_0_2', 'moments_normalized_1_0', 'moments_normalized_1_1', 'moments_normalized_1_2', 'moments_normalized_2_0', 'moments_normalized_2_1', 'moments_normalized_2_2',
-                  'moments_spatial_0_0', 'moments_spatial_0_1', 'moments_spatial_0_2', 'moments_spatial_1_0', 'moments_spatial_1_1', 'moments_spatial_1_2', 'moments_spatial_2_0', 'moments_spatial_2_1', 'moments_spatial_2_2', 'moments_weighted_central_0_0',
-                  'moments_weighted_central_0_1', 'moments_weighted_central_0_2', 'moments_weighted_central_1_0', 'moments_weighted_central_1_1', 'moments_weighted_central_1_2', 'moments_weighted_central_2_0', 'moments_weighted_central_2_1',
-                  'moments_weighted_central_2_2', 'moments_weighted_normalized_0_0', 'moments_weighted_normalized_0_1', 'moments_weighted_normalized_0_2', 'moments_weighted_normalized_1_0', 'moments_weighted_normalized_1_1', 'moments_weighted_normalized_1_2',
-                  'moments_weighted_normalized_2_0', 'moments_weighted_normalized_2_1', 'moments_weighted_normalized_2_2', 'moments_weighted_spatial_0_0', 'moments_weighted_spatial_0_1', 'moments_weighted_spatial_0_2', 'moments_weighted_spatial_1_0',
-                  'moments_weighted_spatial_1_1', 'moments_weighted_spatial_1_2', 'moments_weighted_spatial_2_0', 'moments_weighted_spatial_2_1', 'moments_weighted_spatial_2_2', 'orientation', 'perimeter', 'shannon_entropy_hartley', 'shannon_entropy_natural',
-                  'shannon_entropy_shannon', 'solidity', 'moments_zernike_8_8_00', 'moments_zernike_8_8_01', 'moments_zernike_8_8_02', 'moments_zernike_8_8_03', 'moments_zernike_8_8_04', 'moments_zernike_8_8_05', 'moments_zernike_8_8_06', 'moments_zernike_8_8_07',
-                  'moments_zernike_8_8_08', 'moments_zernike_8_8_09', 'moments_zernike_8_8_10', 'moments_zernike_8_8_11', 'moments_zernike_8_8_12', 'moments_zernike_8_8_13', 'moments_zernike_8_8_14', 'moments_zernike_8_8_15', 'moments_zernike_8_8_16',
-                  'moments_zernike_8_8_17', 'moments_zernike_8_8_18', 'moments_zernike_8_8_19', 'moments_zernike_8_8_20', 'moments_zernike_8_8_21', 'moments_zernike_8_8_22', 'moments_zernike_8_8_23', 'moments_zernike_8_8_24', 'threshold_adjacency_statistics_00',
-                  'threshold_adjacency_statistics_01', 'threshold_adjacency_statistics_02', 'threshold_adjacency_statistics_03', 'threshold_adjacency_statistics_04', 'threshold_adjacency_statistics_05', 'threshold_adjacency_statistics_06',
-                  'threshold_adjacency_statistics_07', 'threshold_adjacency_statistics_08', 'threshold_adjacency_statistics_09', 'threshold_adjacency_statistics_10', 'threshold_adjacency_statistics_11', 'threshold_adjacency_statistics_12',
-                  'threshold_adjacency_statistics_13', 'threshold_adjacency_statistics_14', 'threshold_adjacency_statistics_15', 'threshold_adjacency_statistics_16', 'threshold_adjacency_statistics_17', 'threshold_adjacency_statistics_18',
-                  'threshold_adjacency_statistics_19', 'threshold_adjacency_statistics_20', 'threshold_adjacency_statistics_21', 'threshold_adjacency_statistics_22', 'threshold_adjacency_statistics_23', 'threshold_adjacency_statistics_24',
-                  'threshold_adjacency_statistics_25', 'threshold_adjacency_statistics_26', 'threshold_adjacency_statistics_27', 'threshold_adjacency_statistics_28', 'threshold_adjacency_statistics_29', 'threshold_adjacency_statistics_30',
-                  'threshold_adjacency_statistics_31', 'threshold_adjacency_statistics_32', 'threshold_adjacency_statistics_33', 'threshold_adjacency_statistics_34', 'threshold_adjacency_statistics_35', 'threshold_adjacency_statistics_36',
-                  'threshold_adjacency_statistics_37', 'threshold_adjacency_statistics_38', 'threshold_adjacency_statistics_39', 'threshold_adjacency_statistics_40', 'threshold_adjacency_statistics_41', 'threshold_adjacency_statistics_42',
-                  'threshold_adjacency_statistics_43', 'threshold_adjacency_statistics_44', 'threshold_adjacency_statistics_45', 'threshold_adjacency_statistics_46', 'threshold_adjacency_statistics_47', 'threshold_adjacency_statistics_48',
-                  'threshold_adjacency_statistics_49', 'threshold_adjacency_statistics_50', 'threshold_adjacency_statistics_51', 'threshold_adjacency_statistics_52', 'threshold_adjacency_statistics_53', 'local_binary_patterns_00_08_06',
-                  'local_binary_patterns_01_08_06', 'local_binary_patterns_02_08_06', 'local_binary_patterns_03_08_06', 'local_binary_patterns_04_08_06', 'local_binary_patterns_05_08_06', 'local_binary_patterns_06_08_06', 'local_binary_patterns_07_08_06',
-                  'local_binary_patterns_08_08_06', 'local_binary_patterns_09_08_06', 'local_binary_patterns_10_08_06', 'local_binary_patterns_11_08_06', 'local_binary_patterns_12_08_06', 'local_binary_patterns_13_08_06', 'haralick_angular_second_moment_8_000',
-                  'haralick_contrast_8_000', 'haralick_correlation_8_000', 'haralick_sum_of_squares_variance_8_000', 'haralick_inverse_difference_moment_8_000', 'haralick_sum_average_8_000', 'haralick_sum_variance_8_000', 'haralick_sum_entropy_8_000',
-                  'haralick_entropy_8_000', 'haralick_difference_variance_8_000', 'haralick_difference_entropy_8_000', 'haralick_information_measure_of_correlation_1_8_000', 'haralick_information_measure_of_correlation_2_8_000',
-                  'haralick_angular_second_moment_8_090', 'haralick_contrast_8_090', 'haralick_correlation_8_090', 'haralick_sum_of_squares_variance_8_090', 'haralick_inverse_difference_moment_8_090', 'haralick_sum_average_8_090', 'haralick_sum_variance_8_090',
-                  'haralick_sum_entropy_8_090', 'haralick_entropy_8_090', 'haralick_difference_variance_8_090', 'haralick_difference_entropy_8_090', 'haralick_information_measure_of_correlation_1_8_090', 'haralick_information_measure_of_correlation_2_8_090',
-                  'haralick_angular_second_moment_8_180', 'haralick_contrast_8_180', 'haralick_correlation_8_180', 'haralick_sum_of_squares_variance_8_180', 'haralick_inverse_difference_moment_8_180', 'haralick_sum_average_8_180', 'haralick_sum_variance_8_180',
-                  'haralick_sum_entropy_8_180', 'haralick_entropy_8_180', 'haralick_difference_variance_8_180', 'haralick_difference_entropy_8_180', 'haralick_information_measure_of_correlation_1_8_180', 'haralick_information_measure_of_correlation_2_8_180',
-                  'haralick_angular_second_moment_8_270', 'haralick_contrast_8_270', 'haralick_correlation_8_270', 'haralick_sum_of_squares_variance_8_270', 'haralick_inverse_difference_moment_8_270', 'haralick_sum_average_8_270', 'haralick_sum_variance_8_270',
-                  'haralick_sum_entropy_8_270', 'haralick_entropy_8_270', 'haralick_difference_variance_8_270', 'haralick_difference_entropy_8_270', 'haralick_information_measure_of_correlation_1_8_270', 'haralick_information_measure_of_correlation_2_8_270',
-                  'pathname']
-    cellarray = shkim219.query.retrievecells(filename)
-    return np.concatenate(fieldnames, cellarray)
+# def retrievecells(filename):
+#     fieldnames = ['area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
+#                   'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
+#                   'inertia_tensor_1_0', 'inertia_tensor_1_1', 'inertia_tensor_eigen_values_0', 'inertia_tensor_eigen_values_1', 'intensity_integrated', 'intensity_maximum', 'intensity_mean', 'intensity_median', 'intensity_median_absolute_deviation',
+#                   'intensity_minimum', 'intensity_quartile_1', 'intensity_quartile_2', 'intensity_quartile_3', 'intensity_standard_deviation', 'label', 'major_axis_length', 'minor_axis_length', 'moments_central_0_0', 'moments_central_0_1',
+#                   'moments_central_0_2', 'moments_central_1_0', 'moments_central_1_1', 'moments_central_1_2', 'moments_central_2_0', 'moments_central_2_1', 'moments_central_2_2', 'moments_hu_0', 'moments_hu_1', 'moments_hu_2', 'moments_hu_3',
+#                   'moments_hu_4', 'moments_hu_5', 'moments_hu_6', 'moments_hu_weighted_0', 'moments_hu_weighted_1', 'moments_hu_weighted_2', 'moments_hu_weighted_3', 'moments_hu_weighted_4', 'moments_hu_weighted_5', 'moments_hu_weighted_6',
+#                   'moments_normalized_0_0', 'moments_normalized_0_1', 'moments_normalized_0_2', 'moments_normalized_1_0', 'moments_normalized_1_1', 'moments_normalized_1_2', 'moments_normalized_2_0', 'moments_normalized_2_1', 'moments_normalized_2_2',
+#                   'moments_spatial_0_0', 'moments_spatial_0_1', 'moments_spatial_0_2', 'moments_spatial_1_0', 'moments_spatial_1_1', 'moments_spatial_1_2', 'moments_spatial_2_0', 'moments_spatial_2_1', 'moments_spatial_2_2', 'moments_weighted_central_0_0',
+#                   'moments_weighted_central_0_1', 'moments_weighted_central_0_2', 'moments_weighted_central_1_0', 'moments_weighted_central_1_1', 'moments_weighted_central_1_2', 'moments_weighted_central_2_0', 'moments_weighted_central_2_1',
+#                   'moments_weighted_central_2_2', 'moments_weighted_normalized_0_0', 'moments_weighted_normalized_0_1', 'moments_weighted_normalized_0_2', 'moments_weighted_normalized_1_0', 'moments_weighted_normalized_1_1', 'moments_weighted_normalized_1_2',
+#                   'moments_weighted_normalized_2_0', 'moments_weighted_normalized_2_1', 'moments_weighted_normalized_2_2', 'moments_weighted_spatial_0_0', 'moments_weighted_spatial_0_1', 'moments_weighted_spatial_0_2', 'moments_weighted_spatial_1_0',
+#                   'moments_weighted_spatial_1_1', 'moments_weighted_spatial_1_2', 'moments_weighted_spatial_2_0', 'moments_weighted_spatial_2_1', 'moments_weighted_spatial_2_2', 'orientation', 'perimeter', 'shannon_entropy_hartley', 'shannon_entropy_natural',
+#                   'shannon_entropy_shannon', 'solidity', 'moments_zernike_8_8_00', 'moments_zernike_8_8_01', 'moments_zernike_8_8_02', 'moments_zernike_8_8_03', 'moments_zernike_8_8_04', 'moments_zernike_8_8_05', 'moments_zernike_8_8_06', 'moments_zernike_8_8_07',
+#                   'moments_zernike_8_8_08', 'moments_zernike_8_8_09', 'moments_zernike_8_8_10', 'moments_zernike_8_8_11', 'moments_zernike_8_8_12', 'moments_zernike_8_8_13', 'moments_zernike_8_8_14', 'moments_zernike_8_8_15', 'moments_zernike_8_8_16',
+#                   'moments_zernike_8_8_17', 'moments_zernike_8_8_18', 'moments_zernike_8_8_19', 'moments_zernike_8_8_20', 'moments_zernike_8_8_21', 'moments_zernike_8_8_22', 'moments_zernike_8_8_23', 'moments_zernike_8_8_24', 'threshold_adjacency_statistics_00',
+#                   'threshold_adjacency_statistics_01', 'threshold_adjacency_statistics_02', 'threshold_adjacency_statistics_03', 'threshold_adjacency_statistics_04', 'threshold_adjacency_statistics_05', 'threshold_adjacency_statistics_06',
+#                   'threshold_adjacency_statistics_07', 'threshold_adjacency_statistics_08', 'threshold_adjacency_statistics_09', 'threshold_adjacency_statistics_10', 'threshold_adjacency_statistics_11', 'threshold_adjacency_statistics_12',
+#                   'threshold_adjacency_statistics_13', 'threshold_adjacency_statistics_14', 'threshold_adjacency_statistics_15', 'threshold_adjacency_statistics_16', 'threshold_adjacency_statistics_17', 'threshold_adjacency_statistics_18',
+#                   'threshold_adjacency_statistics_19', 'threshold_adjacency_statistics_20', 'threshold_adjacency_statistics_21', 'threshold_adjacency_statistics_22', 'threshold_adjacency_statistics_23', 'threshold_adjacency_statistics_24',
+#                   'threshold_adjacency_statistics_25', 'threshold_adjacency_statistics_26', 'threshold_adjacency_statistics_27', 'threshold_adjacency_statistics_28', 'threshold_adjacency_statistics_29', 'threshold_adjacency_statistics_30',
+#                   'threshold_adjacency_statistics_31', 'threshold_adjacency_statistics_32', 'threshold_adjacency_statistics_33', 'threshold_adjacency_statistics_34', 'threshold_adjacency_statistics_35', 'threshold_adjacency_statistics_36',
+#                   'threshold_adjacency_statistics_37', 'threshold_adjacency_statistics_38', 'threshold_adjacency_statistics_39', 'threshold_adjacency_statistics_40', 'threshold_adjacency_statistics_41', 'threshold_adjacency_statistics_42',
+#                   'threshold_adjacency_statistics_43', 'threshold_adjacency_statistics_44', 'threshold_adjacency_statistics_45', 'threshold_adjacency_statistics_46', 'threshold_adjacency_statistics_47', 'threshold_adjacency_statistics_48',
+#                   'threshold_adjacency_statistics_49', 'threshold_adjacency_statistics_50', 'threshold_adjacency_statistics_51', 'threshold_adjacency_statistics_52', 'threshold_adjacency_statistics_53', 'local_binary_patterns_00_08_06',
+#                   'local_binary_patterns_01_08_06', 'local_binary_patterns_02_08_06', 'local_binary_patterns_03_08_06', 'local_binary_patterns_04_08_06', 'local_binary_patterns_05_08_06', 'local_binary_patterns_06_08_06', 'local_binary_patterns_07_08_06',
+#                   'local_binary_patterns_08_08_06', 'local_binary_patterns_09_08_06', 'local_binary_patterns_10_08_06', 'local_binary_patterns_11_08_06', 'local_binary_patterns_12_08_06', 'local_binary_patterns_13_08_06', 'haralick_angular_second_moment_8_000',
+#                   'haralick_contrast_8_000', 'haralick_correlation_8_000', 'haralick_sum_of_squares_variance_8_000', 'haralick_inverse_difference_moment_8_000', 'haralick_sum_average_8_000', 'haralick_sum_variance_8_000', 'haralick_sum_entropy_8_000',
+#                   'haralick_entropy_8_000', 'haralick_difference_variance_8_000', 'haralick_difference_entropy_8_000', 'haralick_information_measure_of_correlation_1_8_000', 'haralick_information_measure_of_correlation_2_8_000',
+#                   'haralick_angular_second_moment_8_090', 'haralick_contrast_8_090', 'haralick_correlation_8_090', 'haralick_sum_of_squares_variance_8_090', 'haralick_inverse_difference_moment_8_090', 'haralick_sum_average_8_090', 'haralick_sum_variance_8_090',
+#                   'haralick_sum_entropy_8_090', 'haralick_entropy_8_090', 'haralick_difference_variance_8_090', 'haralick_difference_entropy_8_090', 'haralick_information_measure_of_correlation_1_8_090', 'haralick_information_measure_of_correlation_2_8_090',
+#                   'haralick_angular_second_moment_8_180', 'haralick_contrast_8_180', 'haralick_correlation_8_180', 'haralick_sum_of_squares_variance_8_180', 'haralick_inverse_difference_moment_8_180', 'haralick_sum_average_8_180', 'haralick_sum_variance_8_180',
+#                   'haralick_sum_entropy_8_180', 'haralick_entropy_8_180', 'haralick_difference_variance_8_180', 'haralick_difference_entropy_8_180', 'haralick_information_measure_of_correlation_1_8_180', 'haralick_information_measure_of_correlation_2_8_180',
+#                   'haralick_angular_second_moment_8_270', 'haralick_contrast_8_270', 'haralick_correlation_8_270', 'haralick_sum_of_squares_variance_8_270', 'haralick_inverse_difference_moment_8_270', 'haralick_sum_average_8_270', 'haralick_sum_variance_8_270',
+#                   'haralick_sum_entropy_8_270', 'haralick_entropy_8_270', 'haralick_difference_variance_8_270', 'haralick_difference_entropy_8_270', 'haralick_information_measure_of_correlation_1_8_270', 'haralick_information_measure_of_correlation_2_8_270',
+#                   'pathname']
+#     cellarray = shkim219.query.retrievecells(filename)
+#     return np.concatenate(fieldnames, cellarray)
 
 
 def create_cell(file, style):
@@ -458,4 +458,4 @@ def one_cell_kmeans(arr, id):
     return query2
 
 
-print(retrievecells("features.csv"))
+#print(retrievecells("features.csv"))
