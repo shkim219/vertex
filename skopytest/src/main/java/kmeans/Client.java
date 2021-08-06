@@ -18,10 +18,7 @@ import org.apache.ignite.ml.math.primitives.vector.Vector;
 import org.apache.ignite.ml.math.primitives.vector.VectorUtils;
 
 import javax.cache.Cache;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 import graphql.Fetch;
@@ -39,7 +36,7 @@ public class Client {
 //        System.out.println(pathname);
         String filename = "features.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
-        ArrayList<String> fetched = Fetch.fetch(filename, "/home/kimse/vertex/shkim219/query/__init__.py");
+        ArrayList<String> fetched = fetch(filename, "/home/kimse/vertex/shkim219/query/__init__.py");
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
@@ -87,6 +84,25 @@ public class Client {
             }
         }
         System.out.flush();
+    }
+
+    private static ArrayList<String> fetch(String filename, String pathname) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("python", pathname, filename);//.inheritIO();
+//        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
+        Process p = pb.start();
+        BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line = "";
+        ArrayList<String> fetched = new ArrayList<String>();
+        int count = 0;
+        while ((line = bfr.readLine()) != null){
+//            System.out.println(line);
+            //count++;
+            fetched.add(line);
+        }
+        //System.out.println(count);
+        p.waitFor();
+        return fetched;
+
     }
 
     private static double askSD() throws IOException{
