@@ -1,10 +1,5 @@
 package graphql;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.entity.ContentType;
-import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
