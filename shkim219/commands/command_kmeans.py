@@ -7,9 +7,9 @@ import os
 @click.argument('filename', nargs=1, type=click.Path())
 def command(filename):
     curpath = os.path.abspath(os.getcwd())
-    cd_in = os.chdir(curpath+"/skopytest")
-    cd_execute = os.system("mvn exec:java -Dexec.mainclass=\"kmeans.Client\" -Dexec.args=\"" + filename + " " + curpath + "/shkim219/query/__init__.py\"")
-    shkim219.query2.create_cell(curpath + "/skopytest/" + filename[0:filename.index(".csv")],"kmeans")
+    cd_in = os.chdir("skopytest")
+    cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"kmeans.Client\" -Dexec.args=\"" + filename + " " + curpath + "/shkim219/query/__init__.py\"")
+    shkim219.query2.create_cell(curpath + "/skopytest/" + filename,"kmeans")
     
 
     
