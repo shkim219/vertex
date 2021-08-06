@@ -34,8 +34,9 @@ public class Client {
     private static String[] headers;
     public static void main(String args[]) throws IOException, InterruptedException {
         String filename = args[0];
+        String pathname = args[1];
 //        String filename = "features.csv";
-        ArrayList<String> fetched = Fetch.fetch(filename);
+        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
 
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
@@ -149,7 +150,7 @@ public class Client {
     }
 
     private static void getOutliers(Vector[] centers, ArrayList<Entry> vectors, String filename, int[] predict, double sd) throws IOException {
-        File file = new File(filename + "outliers.csv");
+        File file = new File(filename.substring(0,filename.indexOf(".csv")) + "outliers.csv");
         try {
             FileWriter out = new FileWriter(file);
             CSVWriter writer = new CSVWriter(out);

@@ -45,8 +45,9 @@ public class Client {
     private static String[] headers;
     public static void main(String... args) throws FileNotFoundException, IOException, InterruptedException {
         String filename = args[0];
+        String pathname = args[1];
 //        String filename = "features.csv";
-        ArrayList<String> fetched = Fetch.fetch(filename);
+        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
 
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
