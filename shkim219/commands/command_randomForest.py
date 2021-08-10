@@ -2,7 +2,7 @@ import click
 import shkim219.query
 import os
 
-@click.command("kmeans")
+@click.command("randomforest")
 @click.argument('filename', nargs=1, type=click.Path())
 def command(filename):
     curpath = os.path.abspath(os.getcwd())
