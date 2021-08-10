@@ -58,7 +58,7 @@ public class Fetch {
 
         //String path = "C:\\Users\\paulk\\PycharmProjects\\vertex-main\\vertex-main\\shkim219\\query\\__init__.py";
         Runtime rt = Runtime.getRuntime();
-        Process pb = rt.exec("shkkim219 get " + filename);
+        Process pb = rt.exec("shkim219 get " + filename);
 //        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
 //        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
 //        Process p = pb.start();
