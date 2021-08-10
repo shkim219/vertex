@@ -30,13 +30,13 @@ public class Client {
     private static ArrayList<String> dataFile = new ArrayList<String>();
     private static String[] headers;
     public static void main(String args[]) throws IOException, InterruptedException {
-//        String filename = args[0];
+        String filename = args[0];
 //        String pathname = args[1];
-//        System.out.println(filename);
+        System.out.println(filename);
 //        System.out.println(pathname);
-        String filename = "features.csv";
+//        String filename = "features.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
-        ArrayList<String> fetched = fetch(filename, "/home/kimse/vertex/shkim219/query/__init__.py");
+        ArrayList<String> fetched = Fetch.fetch(filename);
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
@@ -84,25 +84,6 @@ public class Client {
             }
         }
         System.out.flush();
-    }
-
-    private static ArrayList<String> fetch(String filename, String pathname) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("python", pathname, filename);//.inheritIO();
-//        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
-        Process p = pb.start();
-        BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line = "";
-        ArrayList<String> fetched = new ArrayList<String>();
-        int count = 0;
-        while ((line = bfr.readLine()) != null){
-//            System.out.println(line);
-            //count++;
-            fetched.add(line);
-        }
-        //System.out.println(count);
-        p.waitFor();
-        return fetched;
-
     }
 
     private static double askSD() throws IOException{

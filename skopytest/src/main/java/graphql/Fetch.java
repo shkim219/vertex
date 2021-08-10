@@ -20,7 +20,7 @@ public class Fetch {
         }
     }*/
 
-    public static ArrayList<String> fetch(String filename, String pathname) throws IOException, InterruptedException {
+    public static ArrayList<String> fetch(String filename) throws IOException, InterruptedException {
         /*URL url = new URL("https://api.hypi.app/graphql");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Content-Type", "application/json");
@@ -57,7 +57,7 @@ public class Fetch {
         }*/
 
         //String path = "C:\\Users\\paulk\\PycharmProjects\\vertex-main\\vertex-main\\shkim219\\query\\__init__.py";
-        ProcessBuilder pb = new ProcessBuilder("python", pathname, filename);//.inheritIO();
+        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
 //        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
         Process p = pb.start();
         BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -69,7 +69,7 @@ public class Fetch {
             //count++;
             fetched.add(line);
         }
-        System.out.println(count);
+        //System.out.println(count);
         p.waitFor();
         return fetched;
 
