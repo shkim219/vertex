@@ -60,6 +60,402 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 #     return np.concatenate(fieldnames, cellarray)
 
 
+def getFiles():
+    query = gql(
+        """
+        {
+            find(type: Filename, arcql: "* SORT hypi.id ASC"){
+                edges {
+                    node {
+                        ... on Filename {
+                            csvname
+                            totalnumber
+                        }
+                    }
+                }
+            }
+        }
+        """
+    )
+
+    return client.execute(query)
+
+def retrievecells(filename):
+    cellarray = []
+    numberofentries = getEntries(filename)
+    counter = 1
+    while(counter < numberofentries):
+        if(numberofentries - counter >= 3):
+            toCheck = 3
+        else:
+            toCheck = numberofentries - counter
+        stringfromquery = str(findcells(filename, toCheck, counter))
+        # print(stringfromquery)
+        for i in range(toCheck):
+            loccurnode = stringfromquery.find("'node':")
+            locnextnode = stringfromquery.find("'node':", loccurnode + 1)
+            strnode = stringfromquery[loccurnode + 8: locnextnode - 4]
+            # print(strnode)
+            if(locnextnode != -1):
+                currentcell = makecell(strnode)
+            else:
+                currentcell = makecell(stringfromquery[loccurnode + 8: len(stringfromquery) - 4])
+            cellarray.append(currentcell)
+            stringfromquery = stringfromquery[locnextnode:]
+            # print(toCheck + counter)
+        counter += toCheck
+    return cellarray
+
+def getEntries(filename):
+    query = str(getNumberOfCells(filename))
+    locnumber = query.find("'totalnumber': ")
+    locend = query.find("}", locnumber)
+    numEntries = int(query[(locnumber + len("'totalnumber': ")):locend])
+
+    return numEntries
+
+def getNumberOfCells(filename):
+    query = gql(
+        """
+        {
+            find(type: Filename, arcql: "hypi.id = \'""" + filename + """\'"){
+                edges {
+                    node {
+                        ... on Filename {
+                            totalnumber
+                        }
+                    }
+                }
+            }
+        }
+        """
+    )
+
+    return client.execute(query)
+
+
+
+def findcells(filename, no, current):
+    query = gql(
+        """
+            {
+              find(type: Cell, arcql: "filename = \'""" + filename + """\' AND row IN [ """ + str(current) + ", " + str(current+no) + """) SORT row ASC") {
+                edges {
+                  node {
+                    ... on Cell {
+                      image
+                      area
+                      bound {
+                        area
+                        max_column
+                        max_row
+                        min_column
+                        min_row
+                      }   
+                      centroid {
+                      column
+                      row
+                        weighted_column
+                        weighted_local_column
+                        weighted_row
+                        weighted_local_row
+                      }
+                      convex_hull_area
+                      eccentricity
+                      equivalent_diameter
+                      euler_number
+                      extent
+                      inertia {
+                          tensor_0_0
+                        tensor_0_1
+                        tensor_1_0
+                        tensor_1_1
+                        tensor_eigenvalues_0
+                        tensor_eigenvalues_1
+                      }
+                      intensity {
+                          integrated
+                            maximum
+                            mean
+                            median
+                            median_absolute_deviation
+                            minimum
+                            quartile_1
+                            quartile_2
+                            quartile_3
+                            standard_deviation
+                      }
+                      label
+                      major_axis
+                      minor_axis
+                      moments {
+                          central {
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                            hu {
+                                _0
+                                _1
+                                _2
+                                _3
+                                _4
+                                _5
+                                _6
+                          }
+                            hu_weighted{
+                                _0
+                                _1
+                                _2
+                                _3
+                                _4
+                                _5
+                                _6
+                          }
+                            normalized{
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                            spatial{
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                            weighted_central{
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                            weighted_normalized{
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                            weighted_spatial{
+                              _0_0
+                                _0_1
+                                _0_2
+                                _1_0
+                                _1_1
+                                _1_2
+                                _2_0
+                                _2_1
+                                _2_2
+                          }
+                      }
+                      orientation
+                      perimeter
+                      shannon_entropy {
+                        hartley
+                        natural
+                        shannon                 
+                      }
+                      solidity
+                      moments_zernike {
+                            _0
+                            _1
+                            _2
+                            _3
+                            _4
+                            _5
+                            _6
+                            _7
+                            _8
+                            _9
+                            _10
+                            _11
+                            _12
+                            _13
+                            _14
+                            _15
+                            _16
+                            _17
+                            _18
+                            _19
+                            _20
+                            _21
+                            _22
+                            _23
+                            _24
+                      }
+                      threshold_adjacency_statistics {
+                            _0
+                            _1
+                            _2
+                            _3
+                            _4
+                            _5
+                            _6
+                            _7
+                            _8
+                            _9
+                            _10
+                            _11
+                            _12
+                            _13
+                            _14
+                            _15
+                            _16
+                            _17
+                            _18
+                            _19
+                            _20
+                            _21
+                            _22
+                            _23
+                            _24
+                            _25
+                            _26
+                            _27
+                            _28
+                            _29
+                            _30
+                            _31
+                            _32
+                            _33
+                            _34
+                            _35
+                            _36
+                            _37
+                            _38
+                            _39
+                            _40
+                            _41
+                            _42
+                            _43
+                            _44
+                            _45
+                            _46
+                            _47
+                            _48
+                            _49
+                            _50
+                            _51
+                            _52
+                            _53
+                      }
+                      local_binary_patterns  {
+                            _0
+                            _1
+                            _2
+                            _3
+                            _4
+                            _5
+                            _6
+                            _7
+                            _8
+                            _9
+                            _10
+                            _11
+                            _12
+                            _13
+                      }
+                      haralick {
+                        _0 {
+                            angular_second_moment
+                            contrast
+                            correlation
+                            ss_variance
+                            inverse_difference_moment
+                            sum_average
+                            sum_variance
+                            sum_entropy
+                            entropy
+                            difference_variance
+                            difference_entropy
+                            information_measure_of_correlation_1
+                            information_measure_of_correlation_2
+                        }
+                        _90 {
+                            angular_second_moment
+                            contrast
+                            correlation
+                            ss_variance
+                            inverse_difference_moment
+                            sum_average
+                            sum_variance
+                            sum_entropy
+                            entropy
+                            difference_variance
+                            difference_entropy
+                            information_measure_of_correlation_1
+                            information_measure_of_correlation_2
+                        }
+                        _180 {
+                            angular_second_moment
+                            contrast
+                            correlation
+                            ss_variance
+                            inverse_difference_moment
+                            sum_average
+                            sum_variance
+                            sum_entropy
+                            entropy
+                            difference_variance
+                            difference_entropy
+                            information_measure_of_correlation_1
+                            information_measure_of_correlation_2
+                        }
+                        _270 {
+                            angular_second_moment
+                            contrast
+                            correlation
+                            ss_variance
+                            inverse_difference_moment
+                            sum_average
+                            sum_variance
+                            sum_entropy
+                            entropy
+                            difference_variance
+                            difference_entropy
+                            information_measure_of_correlation_1
+                            information_measure_of_correlation_2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        """
+        )
+
+
+    return client.execute(query)
+
+
+
 def create_cell(file, style):
     df = pd.read_csv(file)
     df.dropna(how="all", inplace=True)
