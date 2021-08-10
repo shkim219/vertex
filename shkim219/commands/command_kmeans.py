@@ -9,7 +9,7 @@ def command(filename):
     curpath = os.path.abspath(os.getcwd())
     cd_in = os.chdir("skopytest")
     # cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"kmeans.Client\"")
-    cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"kmeans.Client\" -Dexec.arguments=\"" + filename)
+    cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"kmeans.Client\" -Dexec.arguments=\"" + filename + "\"")
     shkim219.query2.create_cell(curpath + "/skopytest/" + filename,"kmeans")
     
 

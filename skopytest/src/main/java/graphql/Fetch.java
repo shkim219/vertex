@@ -57,10 +57,12 @@ public class Fetch {
         }*/
 
         //String path = "C:\\Users\\paulk\\PycharmProjects\\vertex-main\\vertex-main\\shkim219\\query\\__init__.py";
-        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
+        Runtime rt = Runtime.getRuntime();
+        Process pb = rt.exec("shkkim219 get " + filename);
+//        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
 //        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
-        Process p = pb.start();
-        BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        Process p = pb.start();
+        BufferedReader bfr = new BufferedReader(new InputStreamReader(pb.getInputStream()));
         String line = "";
         ArrayList<String> fetched = new ArrayList<String>();
         int count = 0;
@@ -70,7 +72,7 @@ public class Fetch {
             fetched.add(line);
         }
         //System.out.println(count);
-        p.waitFor();
+        pb.waitFor();
         return fetched;
 
     }
