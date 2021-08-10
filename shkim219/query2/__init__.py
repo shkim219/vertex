@@ -20,6 +20,37 @@ transport = AIOHTTPTransport(url='https://api.hypi.app/graphql', headers=headers
 client = Client(transport=transport, fetch_schema_from_transport=True)
 
 
+
+class Cell:
+    def __init__(self, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+                 extent,
+                 inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
+                 solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick):
+        self.image = image
+        self.area = area
+        self.bound = bound
+        self.centroid = centroid
+        self.convex_hull_area = convex_hull_area
+        self.eccentricity = eccentricity
+        self.equivalent_diameter = equivalent_diameter
+        self.euler_number = euler_number
+        self.extent = extent
+        self.inertia = inertia
+        self.intensity = intensity
+        self.label = label
+        self.major_axis = major_axis
+        self.minor_axis = minor_axis
+        self.moments = moments
+        self.orientation = orientation
+        self.perimeter = perimeter
+        self.shannon_entropy = shannon_entropy
+        self.solidity = solidity
+        self.moments_zernike = moments_zernike
+        self.threshold_adjacency_statistics = threshold_adjacency_statistics
+        self.local_binary_patterns = local_binary_patterns
+        self.haralick = haralick
+
+
 # def retrievecells(filename):
 #     fieldnames = ['area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
 #                   'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
