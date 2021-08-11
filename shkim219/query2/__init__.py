@@ -840,8 +840,8 @@ def getML(arr, typeML):
     query = """
                   typeML: {
                       ml: "kmeans"
-                      numClusters: """ + numClusters + """
-                      sd: """ + sd + """
+                      numClusters: """ + str(numClusters) + """
+                      sd: """ + str(sd) + """
                       },
                   """ 
                 
@@ -851,8 +851,8 @@ def getML(arr, typeML):
     query = """
                   typeML: {
                       ml: "randomForest"
-                      predictedCategory: """ + predictedCategory + """
-                      error: """ + error + """
+                      predictedCategory: """ + str(predictedCategory) + """
+                      error: """ + str(error) + """
                       },
                   """   
   return query
