@@ -2,6 +2,7 @@ package graphql;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
@@ -10,15 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Fetch {
 
-    /*public static void main(String[] args) throws IOException, InterruptedException{
+    public static void main(String[] args) throws IOException, InterruptedException{
         ArrayList<String> returned = fetch("features.csv");
         for (int i = 0; i < returned.size(); i++){
             System.out.println(returned.get(i));
         }
-    }*/
+    }
 
     public static ArrayList<String> fetch(String filename) throws IOException, InterruptedException {
         /*URL url = new URL("https://api.hypi.app/graphql");
@@ -57,14 +59,22 @@ public class Fetch {
         }*/
 
         //String path = "C:\\Users\\paulk\\PycharmProjects\\vertex-main\\vertex-main\\shkim219\\query\\__init__.py";
-        Runtime rt = Runtime.getRuntime();
-        Process pb = rt.exec("shkim219 get " + filename);
+
+        ArrayList<String> fetched = new ArrayList<String>();
+//        Runtime rt = Runtime.getRuntime();
+//        Process pb = rt.exec("shkim219 get " + filename);
+
+
+        Scanner sc = new Scanner(new File("feastures.csv"));
+        sc.nextLine();
+        while(sc.hasNextLine()){
+            fetched.add(sc.nextLine());
+        }
 //        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
 //        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
 //        Process p = pb.start();
-        BufferedReader bfr = new BufferedReader(new InputStreamReader(pb.getInputStream()));
+        /*BufferedReader bfr = new BufferedReader(new InputStreamReader();
         String line = "";
-        ArrayList<String> fetched = new ArrayList<String>();
         int count = 0;
         while ((line = bfr.readLine()) != null){
 //            System.out.println(line);
@@ -72,7 +82,7 @@ public class Fetch {
             fetched.add(line);
         }
         //System.out.println(count);
-        pb.waitFor();
+        pb.waitFor();*/
         return fetched;
 
     }

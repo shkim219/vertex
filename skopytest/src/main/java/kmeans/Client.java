@@ -30,11 +30,11 @@ public class Client {
     private static ArrayList<String> dataFile = new ArrayList<String>();
     private static String[] headers;
     public static void main(String args[]) throws IOException, InterruptedException {
-        String filename = args[0];
+//        String filename = args[0];
 //        String pathname = args[1];
 //        System.out.println(filename);
 //        System.out.println(pathname);
-//        String filename = "features.csv";
+        String filename = "features.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
         ArrayList<String> fetched = Fetch.fetch(filename);
         IgniteConfiguration configuration = new IgniteConfiguration();
@@ -131,13 +131,13 @@ public class Client {
     private static void getData(ArrayList<String> file, IgniteCache<Integer, Vector> cache) throws FileNotFoundException {
         int cnt = 0;
         for (String row : file) {
-            row = row.substring(1, row.length() - 1);
+            row = row.substring(0, row.length() - 1); //change to 1 and -1
             dataFile.add(row);
             String[] cells = row.split(",");
             double[] features = new double[cells.length];
 
             for (int j = 0; j < cells.length - 1; j++)
-                if (!cells[j].contains("None"))
+                if (!cells[j].equals(""))//!cells[j].contains("None"))
                     features[j + 1] = Double.parseDouble(cells[j]);
             double id = getID(cells[cells.length - 1]);
             features[0] = id;

@@ -172,16 +172,16 @@ public class Client {
     private static void getData(ArrayList<String> file, IgniteCache<Integer, Vector> cache, int toCheck) throws FileNotFoundException {
         int cnt = 0;
         for (String row : file) {
-            row = row.substring(1, row.length() - 1);
+            row = row.substring(0, row.length() - 1);
             dataFile.add(row);
             String[] cells = row.split(",");
             double[] features = new double[cells.length - 1];
 
             for (int j = 1; j < toCheck; j++)
-                if (!cells[j].contains("None"))
+                if (!cells[j].equals(""))//!cells[j].contains("None"))
                     features[j] = Double.parseDouble(cells[j]);
             for (int j = toCheck + 1; j < features.length; j++)
-                if (!cells[j].contains("None"))
+                if (!cells[j].equals(""))//!cells[j].contains("None"))
                     features[j] = Double.parseDouble(cells[j]);
             features[0] = Double.parseDouble(cells[toCheck]);
             /*double id = getID(cells[cells.length - 1]);
