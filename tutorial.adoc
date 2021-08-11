@@ -1,0 +1,255 @@
+= Skopy Database Installation = 
+:toc:
+
+
+== Requirements == 
+
+*Installing dependencies and packages* + 
+This program was designed to run in Python 3.8, which will be touched on later. +
+To install the dependices: + 
+
+[sidebar]
+`+sudo apt install python3.8 python3.8-venv python3-venv+` +
+`+sudo apt-get install python3.8-dev+` +
+
+A virtual environment therefore will be used, as it will help not to interfere with system-wide installed python packages. +
+
+
+== Installing The Program == 
+
+*Cloning the repository* +
+Enter the directory where you want to install it, then clone it: + 
+
+[sidebar]
+`+git clone https://github.com/shkim219/vertex.git+`
+
+Afterwards, we can run the program: +
+
+[sidebar]
+`+cd vertex+` +
+`+python3.8 -m venv venv+` +
+`+source venv/bin/activate+` +
+`+pip install -e .+` +
+
+And the installation is complete!
+
+****
+TIP: You may need to `+pip install -e .+` again when an error shows after a method run
+****
+
+
+== Running The Program == 
+
+There are *four* programs that can currently be run: + 
+
+.Current Methods
+* `+getfiles+` 
+* `+insert+`
+* `+retrieve+`
+* `+delete+`
+* `+maven+`
+* `+kmeans+`
+* `+randomForest+`
+* `+getoutlierfiles+`
+
+
+We will go over what these methods do +
+
+=== getfiles ===
+
+.getfiles
+****
+getfiles will return all the files that were inserted into the database with the number of entries associated with the file +
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 getfiles+`
+
+.Example Output
+[source,js]
+----
+{'find': {'edges': [{'node': {'csvname': 'features.csv', 'totalnumber': 630}}]}}
+----
+
+Here we can see that for the file 'features.csv', there are *629* entries associated with the file. 
+****
+
+=== insert === 
+
+.insert 
+****
+insert will get the skopy output of a csv file and insert it into the database. For every insertion, a specific id will be printed as a confirmation that the analysis has been put into the database
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 insert filelocation+`
+
+An example csv file is present within the repository, which you can test: +
+
+[sidebar]
+`+shkim219 insert shkim219/data/features.csv+`
+
+.Example Output
+[source,js]
+----
+features.csv1  
+features.csv2 
+.
+.
+.
+.
+features.csv630
+----
+
+
+****
+
+=== retrieve ===
+
+.insert
+****
+retrieve will get a file that is in the database, and retrieve all of the information that was associated with the file to your local computer. It will be the same format as the inserted file in a csv form
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 retrieve features.csv example.csv+`
+
+.Example Output
+[source,js]
+----
+ls
+example.csv requirements.txt setup.py shkim219 test.egg-info venv
+----
+
+where `+example.csv+` is created
+****
+
+
+=== delete ===
+
+.delete
+****
+delete will remove all of the entries associated with a file given the input of the filename
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 delete features.csv+`
+
+.Example Output
+[source,js]
+----
+None
+----
+
+This means that there are now no data related to the filename. We can check by using the `+getfiles+` method
+
+[sidebar]
+`+shkim219 getfiles+`
+
+and we get the output:
+
+[sidebar]
+`+{'find': {'edges': []}}+`
+****
+
+
+
+=== maven ===
+
+.maven
+****
+maven will set up the files necessary for the machine learning algorithms
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 maven+`
+
+.Example Output
+[source,js]
+----
+None
+----
+
+This means that you are now ready to use the machine learning algorithms
+****
+
+
+
+=== randomForest ===
+
+.randomForest
+****
+randomForest will run a random forest algorithm on the input file
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 randomForest features.csv+`
+
+.Example Output
+[source,js]
+----
+What to predict on?
+1. area
+...
+
+1
+Analyzing area
+>>> Error Averages: [0.05091177118212608] on 629 number of data
+
+>>> Combined Error Average: 0.05091177118212608 on 1 number of features on 629 number of data
+----
+
+****
+
+
+=== kmeans ===
+
+.kmeans
+****
+kmeans will run a kmeans algorithm based on the file you want to run it on
+
+Running the code: + 
+
+[sidebar]
+`+shkim219 kmeans features.csv+`
+
+.Example Output
+[source,js]
+----
+3 images found. Proceed or use custom? [Y/Custom] Default: Custom
+Custom
+How many clusters?
+1
+z = 2 is the standard for finding outliers. Proceed or use custom? [Y/Custom]
+Custom
+What Threshold?
+1
+426 outliers found
+----
+
+****
+
+=== getoutlierfiles === 
+
+.getoutlierfiles 
+****
+getoutlierfiles will return how many outliers are stored in the new app
+
+Running the code: + 
+[sidebar]
+`+shkim219 getoutlierfiles+`
+
+.Example Output
+[source,js]
+----
+{'find': {'edges': []}}
+----
+
+****
+
