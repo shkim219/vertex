@@ -32,7 +32,7 @@ public class Client {
     public static void main(String args[]) throws IOException, InterruptedException {
         String filename = args[0];
 //        String pathname = args[1];
-        System.out.println(filename);
+//        System.out.println(filename);
 //        System.out.println(pathname);
 //        String filename = "features.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
@@ -154,6 +154,8 @@ public class Client {
             FileWriter out = new FileWriter(file);
             CSVWriter writer = new CSVWriter(out);
             writer.writeNext(headers);
+            String[] kmeansArr = {Integer.toString(centers.length), Double.toString(sd)};
+            writer.writeNext(kmeansArr);
             //Vector[] avg = new Vector[centers.length];
             double[][] avg = new double[centers.length][vectors.get(0).getData().size() - 1];
             ArrayList<Integer> outliers = new ArrayList<Integer>();
