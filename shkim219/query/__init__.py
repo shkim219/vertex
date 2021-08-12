@@ -8,12 +8,16 @@ import click
 import ast
 import numpy as np
 import json
+import sys
 pd.options.mode.chained_assignment = None  # default='warn'
 
+# filename = sys.argv[1]
+
+# filename = "features.csv"
 
 skopy_data = 'C:/Users/paulk/Documents/features.csv'
 
-headers = {'Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJoeXBpLmxvZ2luIjp0cnVlLCJoeXBpLnVzZXJuYW1lIjoic2hraW0yMTlAYnUuZWR1IiwiaHlwaS5lbWFpbCI6InNoa2ltMjE5QGJ1LmVkdSIsImF1ZCI6IjAxRjdWNDE3MFpERFNFWUY4OFZaVDVaNEdGIiwiaWF0IjoxNjI2MTAxNzU2LCJleHAiOjE2Mjg2OTM3NTYsInN1YiI6IjAxRjdWNDE3MFo0R0NDWllSNVcyTTBKUTA0IiwibmJmIjoxNjI2MTAxNzU2fQ.FEw4oK6yaVSZUukvdPES7RqvmaFyTJZpUVxqDnhcdLwsLaosni5dJn0FTjNURt_rMuqfgpz4ijWJ18od7q1GhcOjfPodtUJjM_uv0j3LUcA0DYX9_MKw0LGjlhfK93t2h8zCMXQUfkjjB2ZYPObHkBteshlswtJDhP39q1jQzLHu0ElnYTrM1ZrQ33SfbTbX6QsVzhIEky-rkgkcoVan9_RDfNNrI6GqMsGFp1clWS7dZSROEMIWpe_1mEXWo2xBepJ0ixzEjeOyunnRhihzRQFV-3JrXgK9Skg1O944DOqvyKDDJ-fd7V7qNPTKLV6mNUwO2L3c4KR7YdE_9ERwtA',
+headers = {'Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJoeXBpLmxvZ2luIjp0cnVlLCJoeXBpLnVzZXJuYW1lIjoic2hraW0yMTlAYnUuZWR1IiwiaHlwaS5lbWFpbCI6InNoa2ltMjE5QGJ1LmVkdSIsImF1ZCI6IjAxRjdWNDE3MFpERFNFWUY4OFZaVDVaNEdGIiwiaWF0IjoxNjI4Njk0OTE2LCJleHAiOjE2MzEyODY5MTYsInN1YiI6IjAxRjdWNDE3MFo0R0NDWllSNVcyTTBKUTA0IiwibmJmIjoxNjI4Njk0OTE2fQ.rELYlvjIMk9MX8POZ8ARy-5jTtUEHrSLa8UGbbmIVWRunNYq4_Eb5ClaBIPCvEcnOCI0x75pT9SfGHyvDwR4Z5FmKj4oRn-M2qe0-nC2W7trx9px1oDobHT8S1j63NvQqD85ZKLj2QqOE1WOOsC8JKprja0GKIlLcwX2LaL_7WSG5eQ52BP9R2MFrPEqeaUjilZQau7FPkwLeQ1hfPds_iPLmY4cBfYaBFAS_bPyZ5a05OlD_UyQFQI5GsHaL8fWsA77icaRo2_MKB5ynQRpvBEB133cupFVlzP-QwyOdCmeJoo6dGiPyN-7C_7w8KntTSH5U1Y0bRGnd421psXZaw',
            'hypi-domain': 'clamming.apps.hypi.app'}
 
 transport = AIOHTTPTransport(url='https://api.hypi.app/graphql', headers=headers)
@@ -51,6 +55,407 @@ class Cell:
 
 
 def one_cell(arr, id):
+    for i in range(len(arr)):
+        if str(arr[i]) == 'nan':
+            arr[i] = " "
+    # print(len(arr))
+    area = arr[0]
+    bound = arr[1:6]
+    centroid = arr[6:12]
+    convex_hull_area = arr[12]
+    eccentricity = arr[13]
+    equivalent_diameter = arr[14]
+    euler_number = arr[15]
+    extent = arr[16]
+    inertia = arr[17:23]
+    intensity = arr[23:33]
+    label = arr[33]
+    major_axis = arr[34]
+    minor_axis = arr[35]
+    moments = arr[36:104]
+    orientation = arr[104]
+    perimeter = arr[105]
+    shannon_entropy = arr[106:109]
+    solidity = arr[109]
+    moments_zernike = arr[110:135]
+    threshold_adjacency_statistics = arr[135:189]
+    local_binary_patterns = arr[189:203]
+    haralick = arr[203:255]
+    image = arr[255]
+
+    newCell = Cell(image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+                   extent,
+                   inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
+                   solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick)
+
+    csvloc = str(id).rindex(".csv")
+    filenamestr = str(id)[:csvloc+4]
+    rowstr = str(id)[csvloc+4:]
+
+    query = "hypi: {id: \"" + str(id) + "\"},\n"
+    queryFirst = "image: \"" + str(image) + "\",\n"
+    queryFirst += "filename: \"" + filenamestr + "\",\n"
+    queryFirst += "row: " + rowstr + ",\n"
+    queryFirst += "area: " + str(int(area)) + ",\n"
+    querySecond = """bound: {
+                    area: """ + str(bound[0]) + """,
+                    max_column: """ + str(bound[1]) + """,
+                    max_row: """ + str(bound[2]) + """,
+                    min_column: """ + str(bound[3]) + """,
+                    min_row: """ + str(bound[4]) + """
+                    },\n"""
+    queryThird = """centroid: {
+                    column: """ + str(centroid[0]) + """,
+                    row: """ + str(centroid[1]) + """,
+                    weighted_column: """ + str(centroid[2]) + """,
+                    weighted_local_column: """ + str(centroid[3]) + """,
+                    weighted_row: """ + str(centroid[4]) + """,
+                    weighted_local_row: """ + str(centroid[5]) + """
+                    },\n"""
+    queryFourth = "convex_hull_area: " + str(int(convex_hull_area)) + ",\n"
+    queryFourth += "eccentricity: " + str(eccentricity) + ",\n"
+    queryFourth += "equivalent_diameter: " + str(equivalent_diameter) + ",\n"
+    queryFourth += "euler_number: " + str(int(euler_number)) + ",\n"
+    queryFourth += "extent: " + str(extent) + ",\n"
+    queryFifth = """inertia: {
+                    tensor_0_0: """ + str(inertia[0]) + """,
+                    tensor_0_1: """ + str(inertia[1]) + """,
+                    tensor_1_0: """ + str(inertia[2]) + """,
+                    tensor_1_1: """ + str(inertia[3]) + """,
+                    tensor_eigenvalues_0: """ + str(inertia[4]) + """,
+                    tensor_eigenvalues_1: """ + str(inertia[5]) + """
+                    },\n"""
+    querySixth = """intensity: {
+                    integrated: """ + str(int(intensity[0])) + """,
+                    maximum: """ + str(int(intensity[1])) + """,
+                    mean: """ + str(intensity[2]) + """,
+                    median: """ + str(int(intensity[3])) + """,
+                    median_absolute_deviation: """ + str(int(intensity[4])) + """,
+                    minimum: """ + str(int(intensity[5])) + """
+                    quartile_1: """ + str(int(intensity[6])) + """,
+                    quartile_2: """ + str(int(intensity[7])) + """,
+                    quartile_3: """ + str(int(intensity[8])) + """,
+                    standard_deviation: """ + str(intensity[9]) + """
+                    },\n"""
+    querySeventh = "label: " + str(int(label)) + ",\n"
+    querySeventh += "major_axis: " + str(major_axis) + ",\n"
+    querySeventh += "minor_axis: " + str(minor_axis) + ",\n"
+    queryEighth = """moments: {
+                    central: { 
+                        _0_0: """ + str(moments[0]) + """,
+                        _0_1: """ + str(moments[1]) + """,
+                        _0_2: """ + str(moments[2]) + """,
+                        _1_0: """ + str(moments[3]) + """,
+                        _1_1: """ + str(moments[4]) + """,
+                        _1_2: """ + str(moments[5]) + """,
+                        _2_0: """ + str(moments[6]) + """,
+                        _2_1: """ + str(moments[7]) + """,
+                        _2_2: """ + str(moments[8]) + """
+                        },
+                      },\n"""             
+    queryEighth1 = """moments: {
+                        hu: {
+                        _0: """ + str(moments[9]) + """,
+                        _1: """ + str(moments[10]) + """,
+                        _2: """ + str(moments[11]) + """,
+                        _3: """ + str(moments[12]) + """,
+                        _4: """ + str(moments[13]) + """,
+                        _5: """ + str(moments[14]) + """,
+                        _6: """ + str(moments[15]) + """
+                        },
+                      },\n"""   
+    queryEighth2 = """moments: {
+                    hu_weighted: {
+                        _0: """ + str(moments[16]) + """,
+                        _1: """ + str(moments[17]) + """,
+                        _2: """ + str(moments[18]) + """,
+                        _3: """ + str(moments[19]) + """,
+                        _4: """ + str(moments[20]) + """,
+                        _5: """ + str(moments[21]) + """,
+                        _6: """ + str(moments[22]) + """
+                        },
+                      },\n"""  
+    queryEighth3 = """moments: {               
+                    normalized: {
+                        _0_0: """ + str(moments[23]) + """,
+                        _0_1: """ + str(moments[24]) + """,
+                        _0_2: """ + str(moments[25]) + """,
+                        _1_0: """ + str(moments[26]) + """,
+                        _1_1: """ + str(moments[27]) + """,
+                        _1_2: """ + str(moments[28]) + """,
+                        _2_0: """ + str(moments[29]) + """,
+                        _2_1: """ + str(moments[30]) + """,
+                        _2_2: """ + str(moments[31]) + """
+                        },
+                      },\n"""   
+    queryEighth4 = """moments: {
+                    spatial: {
+                        _0_0: """ + str(int(moments[32])) + """,
+                        _0_1: """ + str(int(moments[33])) + """,
+                        _0_2: """ + str(int(moments[34])) + """,
+                        _1_0: """ + str(int(moments[35])) + """,
+                        _1_1: """ + str(int(moments[36])) + """,
+                        _1_2: """ + str(int(moments[37])) + """,
+                        _2_0: """ + str(int(moments[38])) + """,
+                        _2_1: """ + str(int(moments[39])) + """,
+                        _2_2: """ + str(int(moments[40])) + """
+                        },
+                      },\n"""   
+    queryEighth5 = """moments: {
+                    weighted_central: {
+                        _0_0: """ + str(moments[41]) + """,
+                        _0_1: """ + str(moments[42]) + """,
+                        _0_2: """ + str(moments[43]) + """,
+                        _1_0: """ + str(moments[44]) + """,
+                        _1_1: """ + str(moments[45]) + """,
+                        _1_2: """ + str(moments[46]) + """,
+                        _2_0: """ + str(moments[47]) + """,
+                        _2_1: """ + str(moments[48]) + """,
+                        _2_2: """ + str(moments[49]) + """
+                        },
+                      },\n"""
+    queryEighth6 = """moments: {   
+                    weighted_normalized: {
+                        _0_0: """ + str(moments[50]) + """,
+                        _0_1: """ + str(moments[51]) + """,
+                        _0_2: """ + str(moments[52]) + """,
+                        _1_0: """ + str(moments[53]) + """,
+                        _1_1: """ + str(moments[54]) + """,
+                        _1_2: """ + str(moments[55]) + """,
+                        _2_0: """ + str(moments[56]) + """,
+                        _2_1: """ + str(moments[57]) + """,
+                        _2_2: """ + str(moments[58]) + """
+                        },
+                      },\n"""  
+    queryEighth7 = """moments: { 
+                    weighted_spatial: {
+                        _0_0: """ + str(int(moments[59])) + """,
+                        _0_1: """ + str(int(moments[60])) + """,
+                        _0_2: """ + str(int(moments[61])) + """,
+                        _1_0: """ + str(int(moments[62])) + """,
+                        _1_1: """ + str(int(moments[63])) + """,
+                        _1_2: """ + str(int(moments[64])) + """,
+                        _2_0: """ + str(int(moments[65])) + """,
+                        _2_1: """ + str(int(moments[66])) + """,
+                        _2_2: """ + str(int(moments[67])) + """
+                        }
+                    },\n"""
+    queryNinth = "orientation: " + str(orientation) + ",\n"
+    queryNinth += "perimeter: " + str(perimeter) + ",\n"
+    queryNinth += """shannon_entropy: {
+                    hartley: """ + str(shannon_entropy[0]) + """,
+                    natural: """ + str(shannon_entropy[1]) + """,
+                    shannon: """ + str(shannon_entropy[2]) + """
+                    },\n"""
+    queryNinth += "solidity: " + str(solidity) + ",\n"
+    queryTenth = """moments_zernike: {
+                    _0: """ + str(moments_zernike[0]) + """,
+                    _1: """ + str(moments_zernike[1]) + """,
+                    _2: """ + str(moments_zernike[2]) + """,
+                    _3: """ + str(moments_zernike[3]) + """,
+                    _4: """ + str(moments_zernike[4]) + """,
+                    _5: """ + str(moments_zernike[5]) + """,
+                    _6: """ + str(moments_zernike[6]) + """,
+                    _7: """ + str(moments_zernike[7]) + """,
+                    _8: """ + str(moments_zernike[8]) + """,
+                    _9: """ + str(moments_zernike[9]) + """,
+                    _10: """ + str(moments_zernike[10]) + """,
+                    },\n"""
+    queryTenth1 = """moments_zernike: {            
+                    _11: """ + str(moments_zernike[11]) + """,
+                    _12: """ + str(moments_zernike[12]) + """,
+                    _13: """ + str(moments_zernike[13]) + """,
+                    _14: """ + str(moments_zernike[14]) + """,
+                    _15: """ + str(moments_zernike[15]) + """,
+                    _16: """ + str(moments_zernike[16]) + """,
+                    _17: """ + str(moments_zernike[17]) + """,
+                    _18: """ + str(moments_zernike[18]) + """,
+                    _19: """ + str(moments_zernike[19]) + """,
+                    _20: """ + str(moments_zernike[20]) + """,
+                    _21: """ + str(moments_zernike[21]) + """,
+                    _22: """ + str(moments_zernike[22]) + """,
+                    _23: """ + str(moments_zernike[23]) + """,
+                    _24: """ + str(moments_zernike[24]) + """
+                    },\n"""
+    queryEleventh = """threshold_adjacency_statistics: {
+                        _0: """ + str(threshold_adjacency_statistics[0]) + """,
+                        _1: """ + str(threshold_adjacency_statistics[1]) + """,
+                        _2: """ + str(threshold_adjacency_statistics[2]) + """,
+                        _3: """ + str(threshold_adjacency_statistics[3]) + """,
+                        _4: """ + str(threshold_adjacency_statistics[4]) + """,
+                        _5: """ + str(threshold_adjacency_statistics[5]) + """,
+                        _6: """ + str(threshold_adjacency_statistics[6]) + """,
+                        _7: """ + str(threshold_adjacency_statistics[7]) + """,
+                        _8: """ + str(threshold_adjacency_statistics[8]) + """,
+                        _9: """ + str(threshold_adjacency_statistics[9]) + """,
+                        _10: """ + str(threshold_adjacency_statistics[10]) + """,
+                        },\n"""
+    queryEleventh1 = """threshold_adjacency_statistics: {
+                        _11: """ + str(threshold_adjacency_statistics[11]) + """,
+                        _12: """ + str(threshold_adjacency_statistics[12]) + """,
+                        _13: """ + str(threshold_adjacency_statistics[13]) + """,
+                        _14: """ + str(threshold_adjacency_statistics[14]) + """,
+                        _15: """ + str(threshold_adjacency_statistics[15]) + """,
+                        _16: """ + str(threshold_adjacency_statistics[16]) + """,
+                        _17: """ + str(threshold_adjacency_statistics[17]) + """,
+                        _18: """ + str(threshold_adjacency_statistics[18]) + """,
+                        _19: """ + str(threshold_adjacency_statistics[19]) + """,
+                        _20: """ + str(threshold_adjacency_statistics[20]) + """,
+                        },\n"""
+    queryEleventh2 = """threshold_adjacency_statistics: {
+                        _21: """ + str(threshold_adjacency_statistics[21]) + """,
+                        _22: """ + str(threshold_adjacency_statistics[22]) + """,
+                        _23: """ + str(threshold_adjacency_statistics[23]) + """,
+                        _24: """ + str(threshold_adjacency_statistics[24]) + """,
+                        _25: """ + str(threshold_adjacency_statistics[25]) + """,
+                        _26: """ + str(threshold_adjacency_statistics[26]) + """,
+                        _27: """ + str(threshold_adjacency_statistics[27]) + """,
+                        _28: """ + str(threshold_adjacency_statistics[28]) + """,
+                        _29: """ + str(threshold_adjacency_statistics[29]) + """,
+                        _30: """ + str(threshold_adjacency_statistics[30]) + """,
+                        },\n"""
+    queryEleventh3 = """threshold_adjacency_statistics: {
+                        _31: """ + str(threshold_adjacency_statistics[31]) + """,
+                        _32: """ + str(threshold_adjacency_statistics[32]) + """,
+                        _33: """ + str(threshold_adjacency_statistics[33]) + """,
+                        _34: """ + str(threshold_adjacency_statistics[34]) + """,
+                        _35: """ + str(threshold_adjacency_statistics[35]) + """,
+                        _36: """ + str(threshold_adjacency_statistics[36]) + """,
+                        _37: """ + str(threshold_adjacency_statistics[37]) + """,
+                        _38: """ + str(threshold_adjacency_statistics[38]) + """,
+                        _39: """ + str(threshold_adjacency_statistics[39]) + """,
+                        _40: """ + str(threshold_adjacency_statistics[40]) + """,
+                        },\n"""
+    queryEleventh4 = """threshold_adjacency_statistics: {
+                        _41: """ + str(threshold_adjacency_statistics[41]) + """,
+                        _42: """ + str(threshold_adjacency_statistics[42]) + """,
+                        _43: """ + str(threshold_adjacency_statistics[43]) + """,
+                        _44: """ + str(threshold_adjacency_statistics[44]) + """,
+                        _45: """ + str(threshold_adjacency_statistics[45]) + """,
+                        _46: """ + str(threshold_adjacency_statistics[46]) + """,
+                        _47: """ + str(threshold_adjacency_statistics[47]) + """,
+                        _48: """ + str(threshold_adjacency_statistics[48]) + """,
+                        _49: """ + str(threshold_adjacency_statistics[49]) + """,
+                        _50: """ + str(threshold_adjacency_statistics[50]) + """,
+                        },\n"""
+    queryEleventh5 = """threshold_adjacency_statistics: {
+                        _51: """ + str(threshold_adjacency_statistics[51]) + """,
+                        _52: """ + str(threshold_adjacency_statistics[52]) + """,
+                        _53: """ + str(threshold_adjacency_statistics[53]) + """
+                        },\n"""
+
+    queryTwelvth = """local_binary_patterns: {
+                        _0: """ + str(int(local_binary_patterns[0])) + """,
+                        _1: """ + str(int(local_binary_patterns[1])) + """,
+                        _2: """ + str(int(local_binary_patterns[2])) + """,
+                        _3: """ + str(int(local_binary_patterns[3])) + """,
+                        _4: """ + str(int(local_binary_patterns[4])) + """,
+                        _5: """ + str(int(local_binary_patterns[5])) + """,
+                        _6: """ + str(int(local_binary_patterns[6])) + """,
+                        _7: """ + str(int(local_binary_patterns[7])) + """,
+                        _8: """ + str(int(local_binary_patterns[8])) + """,
+                        _9: """ + str(int(local_binary_patterns[9])) + """,
+                        _10: """ + str(int(local_binary_patterns[10])) + """,
+                        _11: """ + str(int(local_binary_patterns[11])) + """,
+                        _12: """ + str(int(local_binary_patterns[12])) + """,
+                        _13: """ + str(int(local_binary_patterns[13])) + """
+                        },\n"""
+
+    queryThirteenth = """haralick: {
+                        _0: { 
+                            angular_second_moment: """ + str(haralick[0]) + """,
+                            contrast: """ + str(haralick[1]) + """,
+                            correlation: """ + str(haralick[2]) + """,
+                            ss_variance: """ + str(haralick[3]) + """,
+                            inverse_difference_moment: """ + str(haralick[4]) + """,
+                            sum_average: """ + str(haralick[5]) + """,
+                            sum_variance: """ + str(haralick[6]) + """,
+                            sum_entropy: """ + str(haralick[7]) + """,
+                            entropy: """ + str(haralick[8]) + """,
+                            difference_variance: """ + str(haralick[9]) + """,
+                            difference_entropy: """ + str(haralick[10]) + """,
+                            information_measure_of_correlation_1: """ + str(haralick[11]) + """,
+                            information_measure_of_correlation_2: """ + str(haralick[12]) + """
+                            },
+                        }\n"""
+    queryThirteenth1 = """haralick: {
+                        _90: { 
+                            angular_second_moment: """ + str(haralick[13]) + """,
+                            contrast: """ + str(haralick[14]) + """,
+                            correlation: """ + str(haralick[15]) + """,
+                            ss_variance: """ + str(haralick[16]) + """,
+                            inverse_difference_moment: """ + str(haralick[17]) + """,
+                            sum_average: """ + str(haralick[18]) + """,
+                            sum_variance: """ + str(haralick[19]) + """,
+                            sum_entropy: """ + str(haralick[20]) + """,
+                            entropy: """ + str(haralick[21]) + """,
+                            difference_variance: """ + str(haralick[22]) + """,
+                            difference_entropy: """ + str(haralick[23]) + """,
+                            information_measure_of_correlation_1: """ + str(haralick[24]) + """,
+                            information_measure_of_correlation_2: """ + str(haralick[25]) + """
+                            },
+                        }\n"""
+    queryThirteenth2 = """haralick: {
+                        _180: { 
+                            angular_second_moment: """ + str(haralick[26]) + """,
+                            contrast: """ + str(haralick[27]) + """,
+                            correlation: """ + str(haralick[28]) + """,
+                            ss_variance: """ + str(haralick[29]) + """,
+                            inverse_difference_moment: """ + str(haralick[30]) + """,
+                            sum_average: """ + str(haralick[31]) + """,
+                            sum_variance: """ + str(haralick[32]) + """,
+                            sum_entropy: """ + str(haralick[33]) + """,
+                            entropy: """ + str(haralick[34]) + """,
+                            difference_variance: """ + str(haralick[35]) + """,
+                            difference_entropy: """ + str(haralick[36]) + """,
+                            information_measure_of_correlation_1: """ + str(haralick[37]) + """,
+                            information_measure_of_correlation_2: """ + str(haralick[38]) + """
+                            },
+                        }\n"""
+    queryThirteenth3 = """haralick: {
+                        _270: { 
+                            angular_second_moment: """ + str(haralick[39]) + """,
+                            contrast: """ + str(haralick[40]) + """,
+                            correlation: """ + str(haralick[41]) + """,
+                            ss_variance: """ + str(haralick[42]) + """,
+                            inverse_difference_moment: """ + str(haralick[43]) + """,
+                            sum_average: """ + str(haralick[44]) + """,
+                            sum_variance: """ + str(haralick[45]) + """,
+                            sum_entropy: """ + str(haralick[46]) + """,
+                            entropy: """ + str(haralick[47]) + """,
+                            difference_variance: """ + str(haralick[48]) + """,
+                            difference_entropy: """ + str(haralick[49]) + """,
+                            information_measure_of_correlation_1: """ + str(haralick[50]) + """,
+                            information_measure_of_correlation_2: """ + str(haralick[51]) + """
+                            }
+                        }\n"""
+
+    returnQuery = [queryFirst, querySecond, queryThird, queryFourth, queryFifth, 
+    querySixth, querySeventh, queryEighth, queryEighth1, queryEighth2, queryEighth3, queryEighth4,
+    queryEighth5, queryEighth6, queryEighth7, queryNinth, queryTenth, queryTenth1, queryEleventh, 
+    queryEleventh1, queryEleventh2, queryEleventh3, queryEleventh4, queryEleventh5, queryTwelvth, 
+    queryThirteenth, queryThirteenth1, queryThirteenth2, queryThirteenth3]
+
+    returnQueryChecked = []
+
+    toCheck = ":  ,"
+
+    for i in range(len(returnQuery)):
+      querysplit = returnQuery[i].splitlines()
+      queryCheck = ""
+      for i in range(len(querysplit)):
+          if toCheck in querysplit[i]:
+              pass
+          else:
+              queryCheck += querysplit[i] + "\n"
+      returnQueryChecked.append(queryCheck)
+
+    # print(rowstr) #printing test
+    return returnQueryChecked
+
+
+
+def one_cell_original(arr, id):
     for i in range(len(arr)):
         if str(arr[i]) == 'nan':
             arr[i] = " "
@@ -148,7 +553,7 @@ def one_cell(arr, id):
                         _2_1: """ + str(moments[7]) + """,
                         _2_2: """ + str(moments[8]) + """
                         },
-                    hu: {
+                        hu: {
                         _0: """ + str(moments[9]) + """,
                         _1: """ + str(moments[10]) + """,
                         _2: """ + str(moments[11]) + """,
@@ -198,7 +603,7 @@ def one_cell(arr, id):
                         _2_0: """ + str(moments[47]) + """,
                         _2_1: """ + str(moments[48]) + """,
                         _2_2: """ + str(moments[49]) + """
-                        },
+                        },   
                     weighted_normalized: {
                         _0_0: """ + str(moments[50]) + """,
                         _0_1: """ + str(moments[51]) + """,
@@ -241,7 +646,7 @@ def one_cell(arr, id):
                     _7: """ + str(moments_zernike[7]) + """,
                     _8: """ + str(moments_zernike[8]) + """,
                     _9: """ + str(moments_zernike[9]) + """,
-                    _10: """ + str(moments_zernike[10]) + """,
+                    _10: """ + str(moments_zernike[10]) + """,          
                     _11: """ + str(moments_zernike[11]) + """,
                     _12: """ + str(moments_zernike[12]) + """,
                     _13: """ + str(moments_zernike[13]) + """,
@@ -394,20 +799,19 @@ def one_cell(arr, id):
                             }
                         }\n"""
 
-    querysplit = query.splitlines()
-    query2 = ""
+
+
     toCheck = ":  ,"
+    querysplit = query.splitlines()
+    queryCheck = ""
     for i in range(len(querysplit)):
         if toCheck in querysplit[i]:
             pass
         else:
-            query2 += querysplit[i] + "\n"
+            queryCheck += querysplit[i] + "\n"
 
     # print(rowstr) #printing test
-    return query2
-
-
-
+    return queryCheck
 
 
 
@@ -422,6 +826,11 @@ def create_cell(file):
     for i in range(len(df)):
         createcell((i+1), df.iloc[i], file)
 
+def create_cell_original(file):
+  df = pd.read_csv(file)
+  df.dropna(how="all", inplace=True)
+  for i in range(len(df)):
+      createcell_original((i+1), df.iloc[i], file)
 
 def getFiles():
     query = gql(
@@ -442,7 +851,7 @@ def getFiles():
     )
 
     return client.execute(query)
-
+  
 
 def findtest(filename):
     query = gql(
@@ -1641,25 +2050,27 @@ def deletehelper2(filename, no):
 
 
 
-def createcell(no, arr, filename):
-    s = str(no)
-    slashloc = str(filename).rfind("/")
-    if(slashloc == -1):
-        slashloc = str(filename).rfind("\\")
-    csvloc = str(filename).rfind(".csv")
-    filenamestr = str(filename)[slashloc+1:csvloc+4]
-    finalid = filenamestr + s
-    print(finalid)
-    query = gql(
+def createcell_original(no, arr, filename):
+  s = str(no)
+  slashloc = str(filename).rfind("/")
+  if(slashloc == -1):
+      slashloc = str(filename).rfind("\\")
+  csvloc = str(filename).rfind(".csv")
+  filenamestr = str(filename)[slashloc+1:csvloc+4]
+  finalid = filenamestr + s
+  print(finalid)
+  onecell = one_cell_original(arr,finalid)
+  # print(onecell)
+  query = gql(
         """
         mutation AddCells {
           upsert(values:{
             Cell:[
-              {
-                """
-        + one_cell(arr, finalid) +
-        """   }
-      ],
+                {
+                  """         
+          + onecell +
+          """   }
+        ],
       Filename: [
       {
         hypi: {id: \"""" + filenamestr + """\"},
@@ -1669,11 +2080,71 @@ def createcell(no, arr, filename):
       ]
     }){id}
   }
-"""
+  """
     )
-    return client.execute(query)
+  result = client.execute(query)
+  print("done")
 
-# print(create_cell(skopy_data))
+
+def createcell(no, arr, filename):
+  
+    s = str(no)
+    slashloc = str(filename).rfind("/")
+    if(slashloc == -1):
+        slashloc = str(filename).rfind("\\")
+    csvloc = str(filename).rfind(".csv")
+    filenamestr = str(filename)[slashloc+1:csvloc+4]
+    finalid = filenamestr + s
+    print(finalid)
+    # print(onecell)
+    query = gql(
+          """
+          mutation AddCells {
+            upsert(values:{
+              Cell:[
+                {
+                  hypi: {id: \"""" + finalid + """\"}
+              }
+        ],
+        Filename: [
+        {
+          hypi: {id: \"""" + filenamestr + """\"},
+          csvname: \"""" + filenamestr + """\",
+          totalnumber: """ + s + """
+        }
+        ]
+      }){id}
+    }
+    """
+      )
+    result = client.execute(query)
+    
+    onecell = one_cell(arr, finalid)
+    
+    for queries in onecell:
+      query2 = gql(
+           """
+          mutation UpdateCells {
+            upsert(values:{
+              Cell:[
+                {
+                  hypi: {id: \"""" + finalid + """\"},
+                  """         
+          + queries +
+          """   }
+        ]
+        }){id}
+      }
+      """)
+      resultUpdate = client.execute(query2)
+      print("donePartly")
+        
+    #print(onecell)
+    
+    print("done")
+
+
+# print(create_cell_original(skopy_data))
 # createFile("features.csv", "test.csv")
 # print(getFiles())
 # print(findcells("features.csv"))
@@ -1682,3 +2153,9 @@ def createcell(no, arr, filename):
 # print(len(retrievecells("features.csv")))
 # test_mutation_result(client)
 # test_get(client)
+# filename = "features.csv"
+# print(retrievecells(filename))
+
+
+
+# print("hi")

@@ -17,7 +17,7 @@ public class Fetch {
 
     public static void main(String[] args) throws IOException, InterruptedException{
         ArrayList<String> returned = fetch("features.csv");
-        for (int i = 0; i < returned.size(); i++){
+        for (int i = 0; i < 1; i++){
             System.out.println(returned.get(i));
         }
     }
@@ -61,19 +61,15 @@ public class Fetch {
         //String path = "C:\\Users\\paulk\\PycharmProjects\\vertex-main\\vertex-main\\shkim219\\query\\__init__.py";
 
         ArrayList<String> fetched = new ArrayList<String>();
-//        Runtime rt = Runtime.getRuntime();
-//        Process pb = rt.exec("shkim219 get " + filename);
+        Runtime rt = Runtime.getRuntime();
+        Process pb = rt.exec("shkim219 get " + filename);
 
 
-        Scanner sc = new Scanner(new File("feastures.csv"));
-        sc.nextLine();
-        while(sc.hasNextLine()){
-            fetched.add(sc.nextLine());
-        }
+//
 //        ProcessBuilder pb = new ProcessBuilder("shkim219 get " + filename);//.inheritIO();
 //        ProcessBuilder pb = new ProcessBuilder("python", path).inheritIO();
 //        Process p = pb.start();
-        /*BufferedReader bfr = new BufferedReader(new InputStreamReader();
+        BufferedReader bfr = new BufferedReader(new InputStreamReader(pb.getInputStream()));
         String line = "";
         int count = 0;
         while ((line = bfr.readLine()) != null){
@@ -82,8 +78,17 @@ public class Fetch {
             fetched.add(line);
         }
         //System.out.println(count);
-        pb.waitFor();*/
+        pb.waitFor();
         return fetched;
+    }
 
+    public static ArrayList<String> fetch2(String filename) throws IOException, InterruptedException {
+        ArrayList<String> fetched = new ArrayList<>();
+        Scanner sc = new Scanner(new File(filename));
+        sc.nextLine();
+        while(sc.hasNextLine()){
+            fetched.add(sc.nextLine());
+        }
+        return fetched;
     }
 }

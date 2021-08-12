@@ -9,6 +9,8 @@ def command(filename):
     cd_in = os.chdir("skopytest")
     # cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"randomforest.Client\"")
     cd_execute = os.system("mvn exec:java -Dexec.mainClass=\"randomforest.Client\" -Dexec.arguments=\"" + filename + "\"")
+    filename2 = filename[0:filename.index(".csv")] + "predicted.csv"
+    shkim219.query2.create_cell(curpath + "/skopytest/" + filename2,"randomForest")
     
 
     
