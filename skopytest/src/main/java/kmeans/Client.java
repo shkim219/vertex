@@ -182,7 +182,7 @@ public class Client {
             double[] features = new double[cells.length];
 
             for (int j = 0; j < cells.length - 1; j++)
-                if (!cells[j].equals(""))//!cells[j].contains("None"))
+                if (!cells[j].equals("") && !cells[j].contains("None"))//
                     features[j + 1] = Double.parseDouble(cells[j]);
             double id = getID(cells[cells.length - 1]);
             features[0] = id;

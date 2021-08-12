@@ -80,9 +80,9 @@ public class Client {
             "haralick_sum_entropy_8_270", "haralick_entropy_8_270", "haralick_difference_variance_8_270", "haralick_difference_entropy_8_270", "haralick_information_measure_of_correlation_1_8_270", "haralick_information_measure_of_correlation_2_8_270",
             "pathname"};
     public static void main(String... args) throws FileNotFoundException, IOException, InterruptedException {
-//        String filename = args[0];
+        String filename = args[0];
 //        String pathname = args[1];
-        String filename = "feastures.csv";
+//        String filename = "feastures.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
 
         ArrayList<String> fetched = new ArrayList<>();
