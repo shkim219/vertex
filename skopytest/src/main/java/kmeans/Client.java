@@ -28,7 +28,7 @@ public class Client {
     private static double firstData = 0.0;
     private static int numFirstData;
     private static ArrayList<String> dataFile = new ArrayList<String>();
-    private static String[] headers = {"area", "bounding_box_area", "bounding_box_maximum_column", "bounding_box_maximum_row", "bounding_box_minimum_column", "bounding_box_minimum_row", "centroid_column", "centroid_row", "centroid_weighted_column",
+    private static String[] headers = {"classification", "ml", "numClusters", "sd", "area", "bounding_box_area", "bounding_box_maximum_column", "bounding_box_maximum_row", "bounding_box_minimum_column", "bounding_box_minimum_row", "centroid_column", "centroid_row", "centroid_weighted_column",
             "centroid_weighted_local_column", "centroid_weighted_local_row", "centroid_weighted_row", "convex_hull_area", "eccentricity", "equivalent_diameter", "euler_number", "extent", "inertia_tensor_0_0", "inertia_tensor_0_1",
             "inertia_tensor_1_0", "inertia_tensor_1_1", "inertia_tensor_eigen_values_0", "inertia_tensor_eigen_values_1", "intensity_integrated", "intensity_maximum", "intensity_mean", "intensity_median", "intensity_median_absolute_deviation",
             "intensity_minimum", "intensity_quartile_1", "intensity_quartile_2", "intensity_quartile_3", "intensity_standard_deviation", "label", "major_axis_length", "minor_axis_length", "moments_central_0_0", "moments_central_0_1",
@@ -65,12 +65,13 @@ public class Client {
             "pathname"};
     public static void main(String args[]) throws IOException, InterruptedException {
         String filename = args[0];
-//        String pathname = args[1];
+//        String testname = args[1];
 //        System.out.println(filename);
-//        System.out.println(pathname);
-//        String filename = "features.csv";
+//        String filename = "data.csv";
+//        String testname = "data.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
         ArrayList<String> fetched = new ArrayList<>();
+//        ArrayList<String> fetchedTest = new ArrayList<>();
         if(Fetch.fetch(filename).size() == 0) {
             try {
                 fetched = Fetch.fetch2(filename);
@@ -82,6 +83,7 @@ public class Client {
         }
         else
             fetched = Fetch.fetch(filename);
+
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
@@ -90,9 +92,9 @@ public class Client {
 
             getData(fetched, data); //change csv
 
-            //int numClusters = ids.size() * numFirstData; //change to getting clusters from hypi
+//            int numClusters = ids.size() * numFirstData; //change to getting clusters from hypi
             int numClusters = ask(ids.size());
-
+//            int numClusters = 2;
 
             Vectorizer<Integer, Vector, Integer, Double> vectorizer =
                     new DummyVectorizer<Integer>().labeled(Vectorizer.LabelCoordinate.FIRST);
@@ -107,6 +109,7 @@ public class Client {
                 int[] numpred = new int[numClusters];
                 //int[] numreal = new int[numClusters];
                 ArrayList<Entry> vectorpred = new ArrayList<>();
+                File file = new File(filename.substring(0,filename.indexOf(".csv")) + "predictedkmeans.csv");
                 for (Cache.Entry<Integer, Vector> observation : observations) {
                     Vector val = observation.getValue();
                     Vector inputs = val.copyOfRange(1, val.size());
@@ -121,7 +124,7 @@ public class Client {
 //                System.out.println(Arrays.toString(numpred));
 //                System.out.println(Arrays.toString(numreal));
                 double sd = askSD();
-                getOutliers(mdl.centers(), vectorpred, filename, numpred, sd); //change csv
+                getOutliers(mdl.centers(), vectorpred, filename, numpred, sd);
             }
             finally {
                 if (data != null)
@@ -176,14 +179,14 @@ public class Client {
     private static void getData(ArrayList<String> file, IgniteCache<Integer, Vector> cache) throws FileNotFoundException {
         int cnt = 0;
         for (String row : file) {
-            row = row.substring(1, row.length() - 1); //change to 1 and -1
+            row = row.substring(0, row.length()); //change to 1 and -1
             dataFile.add(row);
             String[] cells = row.split(",");
-            double[] features = new double[cells.length];
+            double[] features = new double[cells.length - 1];
 
             for (int j = 0; j < cells.length - 1; j++)
                 if (!cells[j].equals("") && !cells[j].contains("None"))//
-                    features[j + 1] = Double.parseDouble(cells[j]);
+                    features[j] = Double.parseDouble(cells[j]);
             double id = getID(cells[cells.length - 1]);
             features[0] = id;
 
@@ -193,6 +196,7 @@ public class Client {
         }
     }
 
+
     private static void getOutliers(Vector[] centers, ArrayList<Entry> vectors, String filename, int[] predict, double sd) throws IOException {
         File file = new File(filename.substring(0,filename.indexOf(".csv")) + "outliers.csv");
         try {
@@ -200,7 +204,7 @@ public class Client {
             CSVWriter writer = new CSVWriter(out);
             writer.writeNext(headers);
             String[] kmeansArr = {Integer.toString(centers.length), Double.toString(sd)};
-            writer.writeNext(kmeansArr);
+//            writer.writeNext(kmeansArr);
             //Vector[] avg = new Vector[centers.length];
             double[][] avg = new double[centers.length][vectors.get(0).getData().size() - 1];
             ArrayList<Integer> outliers = new ArrayList<Integer>();
@@ -249,12 +253,16 @@ public class Client {
                 double standardDeviation = standardDeviations[predicted];
                 double predictedDistance = distances.get(i);
                 if((predictedDistance - averageCompare)/standardDeviation >= sd) {
-                    String[] valueOfVector = new String[curVector.size()];
+                    String[] valueOfVector = new String[curVector.size() + 4];
                     valueOfVector[valueOfVector.length - 1] = ids.get((int)(curVector.get(0)));
                     double[] othervalues = vectors.get(i).getData().copyOfRange(1, vectors.get(i).getData().size()).asArray();
                     for (int k = 0; k < othervalues.length; k++) {
-                        valueOfVector[k] = Double.toString(othervalues[k]);
+                        valueOfVector[k + 3] = Double.toString(othervalues[k]);
                     }
+                    valueOfVector[0] = "-1";
+                    valueOfVector[1] = "kmeans";
+                    valueOfVector[2] = Integer.toString(centers.length);
+                    valueOfVector[3] = Double.toString(sd);
                     writer.writeNext(valueOfVector);
                     countOfOutliers++;
                 }

@@ -15,7 +15,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 # filename = "features.csv"
 
-skopy_data = 'C:/Users/paulk/Documents/features.csv'
+skopy_data = 'C:/Users/paulk/PycharmProjects/vertex-main/vertex-main/shkim219/data/features.csv'
 
 headers = {'Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJoeXBpLmxvZ2luIjp0cnVlLCJoeXBpLnVzZXJuYW1lIjoic2hraW0yMTlAYnUuZWR1IiwiaHlwaS5lbWFpbCI6InNoa2ltMjE5QGJ1LmVkdSIsImF1ZCI6IjAxRjdWNDE3MFpERFNFWUY4OFZaVDVaNEdGIiwiaWF0IjoxNjI4Njk0OTE2LCJleHAiOjE2MzEyODY5MTYsInN1YiI6IjAxRjdWNDE3MFo0R0NDWllSNVcyTTBKUTA0IiwibmJmIjoxNjI4Njk0OTE2fQ.rELYlvjIMk9MX8POZ8ARy-5jTtUEHrSLa8UGbbmIVWRunNYq4_Eb5ClaBIPCvEcnOCI0x75pT9SfGHyvDwR4Z5FmKj4oRn-M2qe0-nC2W7trx9px1oDobHT8S1j63NvQqD85ZKLj2QqOE1WOOsC8JKprja0GKIlLcwX2LaL_7WSG5eQ52BP9R2MFrPEqeaUjilZQau7FPkwLeQ1hfPds_iPLmY4cBfYaBFAS_bPyZ5a05OlD_UyQFQI5GsHaL8fWsA77icaRo2_MKB5ynQRpvBEB133cupFVlzP-QwyOdCmeJoo6dGiPyN-7C_7w8KntTSH5U1Y0bRGnd421psXZaw',
            'hypi-domain': 'clamming.apps.hypi.app'}
@@ -25,10 +25,11 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 
 
 class Cell:
-    def __init__(self, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+    def __init__(self, classification, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
                  extent,
                  inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
                  solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick):
+        self.classification = classification
         self.image = image
         self.area = area
         self.bound = bound
@@ -59,31 +60,32 @@ def one_cell(arr, id):
         if str(arr[i]) == 'nan':
             arr[i] = " "
     # print(len(arr))
-    area = arr[0]
-    bound = arr[1:6]
-    centroid = arr[6:12]
-    convex_hull_area = arr[12]
-    eccentricity = arr[13]
-    equivalent_diameter = arr[14]
-    euler_number = arr[15]
-    extent = arr[16]
-    inertia = arr[17:23]
-    intensity = arr[23:33]
-    label = arr[33]
-    major_axis = arr[34]
-    minor_axis = arr[35]
-    moments = arr[36:104]
-    orientation = arr[104]
-    perimeter = arr[105]
-    shannon_entropy = arr[106:109]
-    solidity = arr[109]
-    moments_zernike = arr[110:135]
-    threshold_adjacency_statistics = arr[135:189]
-    local_binary_patterns = arr[189:203]
-    haralick = arr[203:255]
-    image = arr[255]
+    classification = arr[0]
+    area = arr[1]
+    bound = arr[2:7]
+    centroid = arr[7:13]
+    convex_hull_area = arr[13]
+    eccentricity = arr[14]
+    equivalent_diameter = arr[15]
+    euler_number = arr[16]
+    extent = arr[17]
+    inertia = arr[18:24]
+    intensity = arr[24:34]
+    label = arr[34]
+    major_axis = arr[35]
+    minor_axis = arr[36]
+    moments = arr[37:105]
+    orientation = arr[105]
+    perimeter = arr[106]
+    shannon_entropy = arr[107:110]
+    solidity = arr[110]
+    moments_zernike = arr[111:136]
+    threshold_adjacency_statistics = arr[136:190]
+    local_binary_patterns = arr[190:204]
+    haralick = arr[204:256]
+    image = arr[256]
 
-    newCell = Cell(image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+    newCell = Cell(classification, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
                    extent,
                    inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
                    solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick)
@@ -96,6 +98,7 @@ def one_cell(arr, id):
     queryFirst = "image: \"" + str(image) + "\",\n"
     queryFirst += "filename: \"" + filenamestr + "\",\n"
     queryFirst += "row: " + rowstr + ",\n"
+    queryFirst += "classification: " + str(int(classification)) + ",\n"
     queryFirst += "area: " + str(int(area)) + ",\n"
     querySecond = """bound: {
                     area: """ + str(bound[0]) + """,
@@ -146,6 +149,10 @@ def one_cell(arr, id):
                         _0_1: """ + str(moments[1]) + """,
                         _0_2: """ + str(moments[2]) + """,
                         _1_0: """ + str(moments[3]) + """,
+                                            },
+                      },\n"""  
+    queryEighth0 = """moments: {
+                    central: { 
                         _1_1: """ + str(moments[4]) + """,
                         _1_2: """ + str(moments[5]) + """,
                         _2_0: """ + str(moments[6]) + """,
@@ -242,12 +249,12 @@ def one_cell(arr, id):
                     },\n"""
     queryNinth = "orientation: " + str(orientation) + ",\n"
     queryNinth += "perimeter: " + str(perimeter) + ",\n"
-    queryNinth += """shannon_entropy: {
+    queryNinth1 = """shannon_entropy: {
                     hartley: """ + str(shannon_entropy[0]) + """,
                     natural: """ + str(shannon_entropy[1]) + """,
                     shannon: """ + str(shannon_entropy[2]) + """
                     },\n"""
-    queryNinth += "solidity: " + str(solidity) + ",\n"
+    queryNinth1 += "solidity: " + str(solidity) + ",\n"
     queryTenth = """moments_zernike: {
                     _0: """ + str(moments_zernike[0]) + """,
                     _1: """ + str(moments_zernike[1]) + """,
@@ -283,6 +290,8 @@ def one_cell(arr, id):
                         _2: """ + str(threshold_adjacency_statistics[2]) + """,
                         _3: """ + str(threshold_adjacency_statistics[3]) + """,
                         _4: """ + str(threshold_adjacency_statistics[4]) + """,
+                        },\n"""
+    queryEleventh0 =  """threshold_adjacency_statistics: {
                         _5: """ + str(threshold_adjacency_statistics[5]) + """,
                         _6: """ + str(threshold_adjacency_statistics[6]) + """,
                         _7: """ + str(threshold_adjacency_statistics[7]) + """,
@@ -351,6 +360,8 @@ def one_cell(arr, id):
                         _3: """ + str(int(local_binary_patterns[3])) + """,
                         _4: """ + str(int(local_binary_patterns[4])) + """,
                         _5: """ + str(int(local_binary_patterns[5])) + """,
+                        },\n"""
+    queryTwelvth0 = """local_binary_patterns: {
                         _6: """ + str(int(local_binary_patterns[6])) + """,
                         _7: """ + str(int(local_binary_patterns[7])) + """,
                         _8: """ + str(int(local_binary_patterns[8])) + """,
@@ -370,6 +381,10 @@ def one_cell(arr, id):
                             inverse_difference_moment: """ + str(haralick[4]) + """,
                             sum_average: """ + str(haralick[5]) + """,
                             sum_variance: """ + str(haralick[6]) + """,
+                                                        },
+                        }\n"""
+    queryThirteenth0 = """haralick: {
+                        _0: { 
                             sum_entropy: """ + str(haralick[7]) + """,
                             entropy: """ + str(haralick[8]) + """,
                             difference_variance: """ + str(haralick[9]) + """,
@@ -384,9 +399,18 @@ def one_cell(arr, id):
                             contrast: """ + str(haralick[14]) + """,
                             correlation: """ + str(haralick[15]) + """,
                             ss_variance: """ + str(haralick[16]) + """,
+                                                                                    },
+                        }\n"""
+    queryThirteenth10 = """haralick: {
+                        _90: { 
                             inverse_difference_moment: """ + str(haralick[17]) + """,
                             sum_average: """ + str(haralick[18]) + """,
                             sum_variance: """ + str(haralick[19]) + """,
+                                                        },
+                        }\n"""
+    
+    queryThirteenth11 = """haralick: {
+                        _90: { 
                             sum_entropy: """ + str(haralick[20]) + """,
                             entropy: """ + str(haralick[21]) + """,
                             difference_variance: """ + str(haralick[22]) + """,
@@ -404,6 +428,10 @@ def one_cell(arr, id):
                             inverse_difference_moment: """ + str(haralick[30]) + """,
                             sum_average: """ + str(haralick[31]) + """,
                             sum_variance: """ + str(haralick[32]) + """,
+                                                      },
+                        }\n"""
+    queryThirteenth20 = """haralick: {
+                        _180: { 
                             sum_entropy: """ + str(haralick[33]) + """,
                             entropy: """ + str(haralick[34]) + """,
                             difference_variance: """ + str(haralick[35]) + """,
@@ -421,6 +449,10 @@ def one_cell(arr, id):
                             inverse_difference_moment: """ + str(haralick[43]) + """,
                             sum_average: """ + str(haralick[44]) + """,
                             sum_variance: """ + str(haralick[45]) + """,
+                                                        },
+                        }\n"""
+    queryThirteenth30 = """haralick: {
+                        _270: { 
                             sum_entropy: """ + str(haralick[46]) + """,
                             entropy: """ + str(haralick[47]) + """,
                             difference_variance: """ + str(haralick[48]) + """,
@@ -431,10 +463,11 @@ def one_cell(arr, id):
                         }\n"""
 
     returnQuery = [queryFirst, querySecond, queryThird, queryFourth, queryFifth, 
-    querySixth, querySeventh, queryEighth, queryEighth1, queryEighth2, queryEighth3, queryEighth4,
-    queryEighth5, queryEighth6, queryEighth7, queryNinth, queryTenth, queryTenth1, queryEleventh, 
-    queryEleventh1, queryEleventh2, queryEleventh3, queryEleventh4, queryEleventh5, queryTwelvth, 
-    queryThirteenth, queryThirteenth1, queryThirteenth2, queryThirteenth3]
+    querySixth, querySeventh, queryEighth, queryEighth0, queryEighth1, queryEighth2, queryEighth3, queryEighth4,
+    queryEighth5, queryEighth6, queryEighth7, queryNinth, queryNinth1, queryTenth, queryTenth1, queryEleventh, 
+     queryEleventh0, queryEleventh1, queryEleventh2, queryEleventh3, queryEleventh4, queryEleventh5, queryTwelvth,
+     queryTwelvth0, queryThirteenth, queryThirteenth0, queryThirteenth1, queryThirteenth10, 
+     queryThirteenth11, queryThirteenth2, queryThirteenth20, queryThirteenth3,queryThirteenth30]
 
     returnQueryChecked = []
 
@@ -460,31 +493,32 @@ def one_cell_original(arr, id):
         if str(arr[i]) == 'nan':
             arr[i] = " "
     # print(len(arr))
-    area = arr[0]
-    bound = arr[1:6]
-    centroid = arr[6:12]
-    convex_hull_area = arr[12]
-    eccentricity = arr[13]
-    equivalent_diameter = arr[14]
-    euler_number = arr[15]
-    extent = arr[16]
-    inertia = arr[17:23]
-    intensity = arr[23:33]
-    label = arr[33]
-    major_axis = arr[34]
-    minor_axis = arr[35]
-    moments = arr[36:104]
-    orientation = arr[104]
-    perimeter = arr[105]
-    shannon_entropy = arr[106:109]
-    solidity = arr[109]
-    moments_zernike = arr[110:135]
-    threshold_adjacency_statistics = arr[135:189]
-    local_binary_patterns = arr[189:203]
-    haralick = arr[203:255]
-    image = arr[255]
+    classification = arr[0]
+    area = arr[1]
+    bound = arr[2:7]
+    centroid = arr[7:13]
+    convex_hull_area = arr[13]
+    eccentricity = arr[14]
+    equivalent_diameter = arr[15]
+    euler_number = arr[16]
+    extent = arr[17]
+    inertia = arr[18:24]
+    intensity = arr[24:34]
+    label = arr[34]
+    major_axis = arr[35]
+    minor_axis = arr[36]
+    moments = arr[37:105]
+    orientation = arr[105]
+    perimeter = arr[106]
+    shannon_entropy = arr[107:110]
+    solidity = arr[110]
+    moments_zernike = arr[111:136]
+    threshold_adjacency_statistics = arr[136:190]
+    local_binary_patterns = arr[190:204]
+    haralick = arr[204:256]
+    image = arr[256]
 
-    newCell = Cell(image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+    newCell = Cell(image, classification, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
                    extent,
                    inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
                    solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick)
@@ -497,6 +531,7 @@ def one_cell_original(arr, id):
     query += "image: \"" + str(image) + "\",\n"
     query += "filename: \"" + filenamestr + "\",\n"
     query += "row: " + rowstr + ",\n"
+    query += "classification: " + str(int(classification)) + ",\n"
     query += "area: " + str(int(area)) + ",\n"
     query += """bound: {
                     area: """ + str(bound[0]) + """,
@@ -887,6 +922,7 @@ def find(filename):
                         id
                       }
                       image
+                      classification
                       area
                       bound {
                         area
@@ -1208,6 +1244,7 @@ def findcells(filename, no, current):
                   node {
                     ... on Cell {
                       image
+                      classification
                       area
                       bound {
                         area
@@ -1526,6 +1563,7 @@ def makecell(stringfromquery):
     keys = cellDictionary.keys()
     cellImage = [cellDictionary["image"]]
 
+    cellClassification = [cellDictionary["classification"]]
     cellArea = [cellDictionary["area"]]
 
     cellBound = cellDictionary["bound"]
@@ -1950,7 +1988,7 @@ def retrievecells(filename):
 
 def createFile(inputfile, outputfile):
 
-    fieldnames = ['area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
+    fieldnames = ['classification', 'area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
                   'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
                   'inertia_tensor_1_0', 'inertia_tensor_1_1', 'inertia_tensor_eigen_values_0', 'inertia_tensor_eigen_values_1', 'intensity_integrated', 'intensity_maximum', 'intensity_mean', 'intensity_median', 'intensity_median_absolute_deviation',
                   'intensity_minimum', 'intensity_quartile_1', 'intensity_quartile_2', 'intensity_quartile_3', 'intensity_standard_deviation', 'label', 'major_axis_length', 'minor_axis_length', 'moments_central_0_0', 'moments_central_0_1',
@@ -2027,11 +2065,13 @@ def deletehelper2(filename, no):
             mutation UpdateNumEntries{
                 upsert(values: {
                     Filename: [
+                      {
                         hypi: {id: \"""" + filename + """\"},
                         csvname: \"""" + filename + """\",
                         totalnumber: """ + str(numleft) + """
+                      }
                     ]
-                }
+                }){id}
             }
             """
 
@@ -2136,20 +2176,22 @@ def createcell(no, arr, filename):
         }){id}
       }
       """)
+      print(queries)
       resultUpdate = client.execute(query2)
-      print("donePartly")
+      # print("donePartly")
         
     #print(onecell)
     
     print("done")
 
 
-# print(create_cell_original(skopy_data))
+# print(create_cell(skopy_data))
 # createFile("features.csv", "test.csv")
 # print(getFiles())
 # print(findcells("features.csv"))
 # while(True):
 #     print(delete())
+# print(delete("features.csv"))
 # print(len(retrievecells("features.csv")))
 # test_mutation_result(client)
 # test_get(client)

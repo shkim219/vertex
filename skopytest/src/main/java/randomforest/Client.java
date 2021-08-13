@@ -44,7 +44,7 @@ public class Client {
     private static int numFirstData;
     private static ArrayList<String> dataFile = new ArrayList<String>();
     private static String obj;
-    private static String[] headers = {"area", "bounding_box_area", "bounding_box_maximum_column", "bounding_box_maximum_row", "bounding_box_minimum_column", "bounding_box_minimum_row", "centroid_column", "centroid_row", "centroid_weighted_column",
+    private static String[] headers = {"classification", "ml", "error", "area", "bounding_box_area", "bounding_box_maximum_column", "bounding_box_maximum_row", "bounding_box_minimum_column", "bounding_box_minimum_row", "centroid_column", "centroid_row", "centroid_weighted_column",
             "centroid_weighted_local_column", "centroid_weighted_local_row", "centroid_weighted_row", "convex_hull_area", "eccentricity", "equivalent_diameter", "euler_number", "extent", "inertia_tensor_0_0", "inertia_tensor_0_1",
             "inertia_tensor_1_0", "inertia_tensor_1_1", "inertia_tensor_eigen_values_0", "inertia_tensor_eigen_values_1", "intensity_integrated", "intensity_maximum", "intensity_mean", "intensity_median", "intensity_median_absolute_deviation",
             "intensity_minimum", "intensity_quartile_1", "intensity_quartile_2", "intensity_quartile_3", "intensity_standard_deviation", "label", "major_axis_length", "minor_axis_length", "moments_central_0_0", "moments_central_0_1",
@@ -81,11 +81,14 @@ public class Client {
             "pathname"};
     public static void main(String... args) throws FileNotFoundException, IOException, InterruptedException {
         String filename = args[0];
+        String testname = args[1];
 //        String pathname = args[1];
 //        String filename = "feastures.csv";
+//        String testname = "data.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
 
         ArrayList<String> fetched = new ArrayList<>();
+        ArrayList<String> fetchedTest = new ArrayList<>();
         if(Fetch.fetch(filename).size() == 0) {
             try {
                 fetched = Fetch.fetch2(filename);
@@ -97,24 +100,36 @@ public class Client {
         }
         else
             fetched = Fetch.fetch(filename);
+
+        try{
+            fetchedTest = Fetch.fetch2(testname);
+        }
+        catch (FileNotFoundException e){
+            System.out.println("cannot find the file");
+            System.exit(0);
+        }
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
         try (Ignite ignite = Ignition.start(configuration)) {
             //CSVWriter writer = new CSVWriter(new FileWriter("testNOW.csv"));
             IgniteCache<Integer, Vector> data = getCache(ignite, "ENTRY");
+            IgniteCache<Integer, Vector> testData = getCache(ignite, "TEST");
 
-            int[] whatToPredict = ask();
+
+
+            int[] whatToPredict = {0,0};
 
             int count = 0;
             double averageError = 0;
             int totalAmount = 0;
-            double[] averageErrors = new double[whatToPredict[1] - whatToPredict[0] + 1];
+            double[] averageErrors = new double[1];
             ArrayList<ArrayList<Double>> predicted = new ArrayList<ArrayList<Double>>(averageErrors.length);
 
             for (int i = whatToPredict[0]; i <= whatToPredict[1]; i++){
 
                 getData(fetched, data, i);
+                getData(fetchedTest, testData, i);
                 AtomicInteger idx = new AtomicInteger(0);
                 RandomForestRegressionTrainer trainer = new RandomForestRegressionTrainer(IntStream.range(0, data.get(1).size() - 1).mapToObj(
                         x -> new FeatureMeta("", idx.getAndIncrement(), false)).collect(Collectors.toList())
@@ -141,9 +156,7 @@ public class Client {
                         double groundTruth = val.get(0);
 
                         double prediction = randomForestMdl.predict(inputs);
-                        if(predicted.size()  == count)
-                            predicted.add(new ArrayList<Double>());
-                        predicted.get(count).add(prediction);
+
                         double error;
                         if(groundTruth == 0){
                             error = prediction / 100;
@@ -154,6 +167,28 @@ public class Client {
                         averageErrors[count] += error;
 
                         totalAmount++;
+                    }
+
+                    //                System.out.println("\n>>> Accuracy " + (1 - amountOfErrors / (double)totalAmount));
+                    /*System.out.println(
+                            ">>> Random Forest multi-class classification algorithm over cached dataset usage example completed."
+                    );*/
+                }
+                for (int j = 0; j < averageErrors.length; j++) {
+                    averageErrors[j] /= ((totalAmount * 1.0) / averageErrors.length);
+                    averageError += averageErrors[j];
+                }
+//                System.out.println("\n>>> Trainer Error Averages: " + Arrays.toString(averageErrors) + " on " + (totalAmount/averageErrors.length) + " number of data");
+                System.out.println("\n>>> Trainer Error Average: " + averageError + " on " + totalAmount + " number of data");
+                try (QueryCursor<Cache.Entry<Integer, Vector>> observations = testData.query(new ScanQuery<>())) {
+                    for (Cache.Entry<Integer, Vector> observation : observations) {
+                        Vector val = observation.getValue();
+                        Vector inputs = val.copyOfRange(1, val.size());
+
+                        double prediction = randomForestMdl.predict(inputs);
+                        if(predicted.size()  == count)
+                            predicted.add(new ArrayList<Double>());
+                        predicted.get(count).add(prediction);
                     }
 
                     //                System.out.println("\n>>> Accuracy " + (1 - amountOfErrors / (double)totalAmount));
@@ -175,13 +210,7 @@ public class Client {
                 //writer.close();
                     count++;
             }
-            for (int i = 0; i < averageErrors.length; i++) {
-                averageErrors[i] /= ((totalAmount * 1.0) / averageErrors.length);
-                averageError += averageErrors[i];
-            }
-            System.out.println("\n>>> Error Averages: " + Arrays.toString(averageErrors) + " on " + (totalAmount/averageErrors.length) + " number of data");
-            System.out.println("\n>>> Combined Error Average: " + averageError + " on " + averageErrors.length + " number of features on " + totalAmount + " number of data");
-            write(predicted, whatToPredict, fetched, averageError, filename);
+            write(predicted, whatToPredict, fetchedTest, averageError, testname);
             data.destroy();
         }
 
@@ -194,17 +223,20 @@ public class Client {
             FileWriter out = new FileWriter(file);
             CSVWriter writer = new CSVWriter(out);
             writer.writeNext(headers);
-            String[] nextLine = {obj, Double.toString(error)};
-            writer.writeNext(nextLine);
             int count = 0;
             for (String row : fetched) {
                 String[] cells = row.split(",");
-                for(int i = whatToPredict[0]; i <= whatToPredict[1]; i++) {
-                    cells[i] = Double.toString(predicted.get((i - whatToPredict[0])).get(count));
+                String[] newcells = new String[cells.length + 2];
+                newcells[0] = Double.toString(predicted.get(0).get(count));
+                newcells[1] = "randomForest";
+                newcells[2] = Double.toString(error);
+                for(int i = 3; i < newcells.length; i++) {
+                    newcells[i] = cells[i-2];
                 }
-                writer.writeNext(cells);
+                writer.writeNext(newcells);
                 count++;
             }
+            System.out.println("\n>>> Creating file " + filename.substring(0,filename.indexOf(".csv")) + "predicted.csv...");
             writer.close();
         }
         catch (IOException e){
@@ -262,7 +294,10 @@ public class Client {
             for (int j = toCheck + 1; j < features.length; j++)
                 if (!cells[j].equals("") && !cells[j].contains("None"))
                     features[j] = Double.parseDouble(cells[j]);
-            features[0] = Double.parseDouble(cells[toCheck]);
+            if(cells[toCheck].equals(""))
+                features[0] = -1;
+            else
+                features[0] = Double.parseDouble(cells[toCheck]);
             /*double id = getID(cells[cells.length - 1]);
             features[0] = id;*/
 
