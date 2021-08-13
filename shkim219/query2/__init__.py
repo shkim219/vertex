@@ -192,18 +192,12 @@ def one_cell(arr, id, typeML):
                         _0_1: """ + str(moments[1]) + """,
                         _0_2: """ + str(moments[2]) + """,
                         _1_0: """ + str(moments[3]) + """,
-                                            }
-                      },\n"""  
-    queryEighth0 = """moments: {
-                    central: { 
                         _1_1: """ + str(moments[4]) + """,
                         _1_2: """ + str(moments[5]) + """,
                         _2_0: """ + str(moments[6]) + """,
                         _2_1: """ + str(moments[7]) + """,
                         _2_2: """ + str(moments[8]) + """
-                        }
-                      },\n"""             
-    queryEighth1 = """moments: {
+                        },
                         hu: {
                         _0: """ + str(moments[9]) + """,
                         _1: """ + str(moments[10]) + """,
@@ -212,9 +206,7 @@ def one_cell(arr, id, typeML):
                         _4: """ + str(moments[13]) + """,
                         _5: """ + str(moments[14]) + """,
                         _6: """ + str(moments[15]) + """
-                        }
-                      },\n"""   
-    queryEighth2 = """moments: {
+                        },
                     hu_weighted: {
                         _0: """ + str(moments[16]) + """,
                         _1: """ + str(moments[17]) + """,
@@ -223,9 +215,7 @@ def one_cell(arr, id, typeML):
                         _4: """ + str(moments[20]) + """,
                         _5: """ + str(moments[21]) + """,
                         _6: """ + str(moments[22]) + """
-                        }
-                      },\n"""  
-    queryEighth3 = """moments: {               
+                        },              
                     normalized: {
                         _0_0: """ + str(moments[23]) + """,
                         _0_1: """ + str(moments[24]) + """,
@@ -236,9 +226,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[29]) + """,
                         _2_1: """ + str(moments[30]) + """,
                         _2_2: """ + str(moments[31]) + """
-                        }
-                      },\n"""   
-    queryEighth4 = """moments: {
+                        },
                     spatial: {
                         _0_0: """ + str(int(moments[32])) + """,
                         _0_1: """ + str(int(moments[33])) + """,
@@ -249,9 +237,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(int(moments[38])) + """,
                         _2_1: """ + str(int(moments[39])) + """,
                         _2_2: """ + str(int(moments[40])) + """
-                        }
-                      },\n"""   
-    queryEighth5 = """moments: {
+                        },
                     weighted_central: {
                         _0_0: """ + str(moments[41]) + """,
                         _0_1: """ + str(moments[42]) + """,
@@ -262,9 +248,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[47]) + """,
                         _2_1: """ + str(moments[48]) + """,
                         _2_2: """ + str(moments[49]) + """
-                        }
-                      },\n"""
-    queryEighth6 = """moments: {   
+                        },   
                     weighted_normalized: {
                         _0_0: """ + str(moments[50]) + """,
                         _0_1: """ + str(moments[51]) + """,
@@ -275,9 +259,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[56]) + """,
                         _2_1: """ + str(moments[57]) + """,
                         _2_2: """ + str(moments[58]) + """
-                        }
-                      },\n"""  
-    queryEighth7 = """moments: { 
+                        },
                     weighted_spatial: {
                         _0_0: """ + str(int(moments[59])) + """,
                         _0_1: """ + str(int(moments[60])) + """,
@@ -309,9 +291,7 @@ def one_cell(arr, id, typeML):
                     _7: """ + str(moments_zernike[7]) + """,
                     _8: """ + str(moments_zernike[8]) + """,
                     _9: """ + str(moments_zernike[9]) + """,
-                    _10: """ + str(moments_zernike[10]) + """,
-                    },\n"""
-    queryTenth1 = """moments_zernike: {            
+                    _10: """ + str(moments_zernike[10]) + """,          
                     _11: """ + str(moments_zernike[11]) + """,
                     _12: """ + str(moments_zernike[12]) + """,
                     _13: """ + str(moments_zernike[13]) + """,
@@ -333,16 +313,12 @@ def one_cell(arr, id, typeML):
                         _2: """ + str(threshold_adjacency_statistics[2]) + """,
                         _3: """ + str(threshold_adjacency_statistics[3]) + """,
                         _4: """ + str(threshold_adjacency_statistics[4]) + """,
-                        },\n"""
-    queryEleventh0 =  """threshold_adjacency_statistics: {
                         _5: """ + str(threshold_adjacency_statistics[5]) + """,
                         _6: """ + str(threshold_adjacency_statistics[6]) + """,
                         _7: """ + str(threshold_adjacency_statistics[7]) + """,
                         _8: """ + str(threshold_adjacency_statistics[8]) + """,
                         _9: """ + str(threshold_adjacency_statistics[9]) + """,
                         _10: """ + str(threshold_adjacency_statistics[10]) + """,
-                        },\n"""
-    queryEleventh1 = """threshold_adjacency_statistics: {
                         _11: """ + str(threshold_adjacency_statistics[11]) + """,
                         _12: """ + str(threshold_adjacency_statistics[12]) + """,
                         _13: """ + str(threshold_adjacency_statistics[13]) + """,
@@ -353,8 +329,6 @@ def one_cell(arr, id, typeML):
                         _18: """ + str(threshold_adjacency_statistics[18]) + """,
                         _19: """ + str(threshold_adjacency_statistics[19]) + """,
                         _20: """ + str(threshold_adjacency_statistics[20]) + """,
-                        },\n"""
-    queryEleventh2 = """threshold_adjacency_statistics: {
                         _21: """ + str(threshold_adjacency_statistics[21]) + """,
                         _22: """ + str(threshold_adjacency_statistics[22]) + """,
                         _23: """ + str(threshold_adjacency_statistics[23]) + """,
@@ -365,8 +339,6 @@ def one_cell(arr, id, typeML):
                         _28: """ + str(threshold_adjacency_statistics[28]) + """,
                         _29: """ + str(threshold_adjacency_statistics[29]) + """,
                         _30: """ + str(threshold_adjacency_statistics[30]) + """,
-                        },\n"""
-    queryEleventh3 = """threshold_adjacency_statistics: {
                         _31: """ + str(threshold_adjacency_statistics[31]) + """,
                         _32: """ + str(threshold_adjacency_statistics[32]) + """,
                         _33: """ + str(threshold_adjacency_statistics[33]) + """,
@@ -377,8 +349,6 @@ def one_cell(arr, id, typeML):
                         _38: """ + str(threshold_adjacency_statistics[38]) + """,
                         _39: """ + str(threshold_adjacency_statistics[39]) + """,
                         _40: """ + str(threshold_adjacency_statistics[40]) + """,
-                        },\n"""
-    queryEleventh4 = """threshold_adjacency_statistics: {
                         _41: """ + str(threshold_adjacency_statistics[41]) + """,
                         _42: """ + str(threshold_adjacency_statistics[42]) + """,
                         _43: """ + str(threshold_adjacency_statistics[43]) + """,
@@ -389,8 +359,6 @@ def one_cell(arr, id, typeML):
                         _48: """ + str(threshold_adjacency_statistics[48]) + """,
                         _49: """ + str(threshold_adjacency_statistics[49]) + """,
                         _50: """ + str(threshold_adjacency_statistics[50]) + """,
-                        },\n"""
-    queryEleventh5 = """threshold_adjacency_statistics: {
                         _51: """ + str(threshold_adjacency_statistics[51]) + """,
                         _52: """ + str(threshold_adjacency_statistics[52]) + """,
                         _53: """ + str(threshold_adjacency_statistics[53]) + """
@@ -403,8 +371,6 @@ def one_cell(arr, id, typeML):
                         _3: """ + str(int(local_binary_patterns[3])) + """,
                         _4: """ + str(int(local_binary_patterns[4])) + """,
                         _5: """ + str(int(local_binary_patterns[5])) + """,
-                        },\n"""
-    queryTwelvth0 = """local_binary_patterns: {
                         _6: """ + str(int(local_binary_patterns[6])) + """,
                         _7: """ + str(int(local_binary_patterns[7])) + """,
                         _8: """ + str(int(local_binary_patterns[8])) + """,
@@ -424,10 +390,6 @@ def one_cell(arr, id, typeML):
                             inverse_difference_moment: """ + str(haralick[4]) + """,
                             sum_average: """ + str(haralick[5]) + """,
                             sum_variance: """ + str(haralick[6]) + """,
-                                                        },
-                        }\n"""
-    queryThirteenth0 = """haralick: {
-                        _0: { 
                             sum_entropy: """ + str(haralick[7]) + """,
                             entropy: """ + str(haralick[8]) + """,
                             difference_variance: """ + str(haralick[9]) + """,
@@ -435,25 +397,14 @@ def one_cell(arr, id, typeML):
                             information_measure_of_correlation_1: """ + str(haralick[11]) + """,
                             information_measure_of_correlation_2: """ + str(haralick[12]) + """
                             },
-                        }\n"""
-    queryThirteenth1 = """haralick: {
                         _90: { 
                             angular_second_moment: """ + str(haralick[13]) + """,
                             contrast: """ + str(haralick[14]) + """,
                             correlation: """ + str(haralick[15]) + """,
                             ss_variance: """ + str(haralick[16]) + """,
-                                                                                    },
-                        }\n"""
-    queryThirteenth10 = """haralick: {
-                        _90: { 
                             inverse_difference_moment: """ + str(haralick[17]) + """,
                             sum_average: """ + str(haralick[18]) + """,
                             sum_variance: """ + str(haralick[19]) + """,
-                                                        },
-                        }\n"""
-    
-    queryThirteenth11 = """haralick: {
-                        _90: { 
                             sum_entropy: """ + str(haralick[20]) + """,
                             entropy: """ + str(haralick[21]) + """,
                             difference_variance: """ + str(haralick[22]) + """,
@@ -461,8 +412,6 @@ def one_cell(arr, id, typeML):
                             information_measure_of_correlation_1: """ + str(haralick[24]) + """,
                             information_measure_of_correlation_2: """ + str(haralick[25]) + """
                             },
-                        }\n"""
-    queryThirteenth2 = """haralick: {
                         _180: { 
                             angular_second_moment: """ + str(haralick[26]) + """,
                             contrast: """ + str(haralick[27]) + """,
@@ -471,10 +420,6 @@ def one_cell(arr, id, typeML):
                             inverse_difference_moment: """ + str(haralick[30]) + """,
                             sum_average: """ + str(haralick[31]) + """,
                             sum_variance: """ + str(haralick[32]) + """,
-                                                      },
-                        }\n"""
-    queryThirteenth20 = """haralick: {
-                        _180: { 
                             sum_entropy: """ + str(haralick[33]) + """,
                             entropy: """ + str(haralick[34]) + """,
                             difference_variance: """ + str(haralick[35]) + """,
@@ -482,8 +427,6 @@ def one_cell(arr, id, typeML):
                             information_measure_of_correlation_1: """ + str(haralick[37]) + """,
                             information_measure_of_correlation_2: """ + str(haralick[38]) + """
                             },
-                        }\n"""
-    queryThirteenth3 = """haralick: {
                         _270: { 
                             angular_second_moment: """ + str(haralick[39]) + """,
                             contrast: """ + str(haralick[40]) + """,
@@ -492,10 +435,6 @@ def one_cell(arr, id, typeML):
                             inverse_difference_moment: """ + str(haralick[43]) + """,
                             sum_average: """ + str(haralick[44]) + """,
                             sum_variance: """ + str(haralick[45]) + """,
-                                                        },
-                        }\n"""
-    queryThirteenth30 = """haralick: {
-                        _270: { 
                             sum_entropy: """ + str(haralick[46]) + """,
                             entropy: """ + str(haralick[47]) + """,
                             difference_variance: """ + str(haralick[48]) + """,
@@ -506,11 +445,8 @@ def one_cell(arr, id, typeML):
                         }\n"""
 
     returnQuery = [queryFirst, querySecond, queryThird, queryFourth, queryFifth, 
-    querySixth, querySeventh, queryEighth, queryEighth0, queryEighth1, queryEighth2, queryEighth3, queryEighth4,
-    queryEighth5, queryEighth6, queryEighth7, queryNinth, queryNinth1, queryTenth, queryTenth1, queryEleventh, 
-     queryEleventh0, queryEleventh1, queryEleventh2, queryEleventh3, queryEleventh4, queryEleventh5, queryTwelvth,
-     queryTwelvth0, queryThirteenth, queryThirteenth0, queryThirteenth1, queryThirteenth10, 
-     queryThirteenth11, queryThirteenth2, queryThirteenth20, queryThirteenth3,queryThirteenth30]
+    querySixth, querySeventh, queryEighth, queryNinth, queryNinth1, queryTenth, queryEleventh, queryTwelvth,
+    queryThirteenth]
 
     returnQueryChecked = []
 
@@ -530,36 +466,82 @@ def one_cell(arr, id, typeML):
     return returnQueryChecked
 
 
-def one_cell_original(arr, id):
+def one_cell_original(arr, id, typeML):
     for i in range(len(arr)):
         if str(arr[i]) == 'nan':
             arr[i] = " "
     # print(len(arr))
-    area = arr[0]
-    bound = arr[1:6]
-    centroid = arr[6:12]
-    convex_hull_area = arr[12]
-    eccentricity = arr[13]
-    equivalent_diameter = arr[14]
-    euler_number = arr[15]
-    extent = arr[16]
-    inertia = arr[17:23]
-    intensity = arr[23:33]
-    label = arr[33]
-    major_axis = arr[34]
-    minor_axis = arr[35]
-    moments = arr[36:104]
-    orientation = arr[104]
-    perimeter = arr[105]
-    shannon_entropy = arr[106:109]
-    solidity = arr[109]
-    moments_zernike = arr[110:135]
-    threshold_adjacency_statistics = arr[135:189]
-    local_binary_patterns = arr[189:203]
-    haralick = arr[203:255]
-    image = arr[255]
+    if(typeML == "kmeans"):
+      classification = arr[0]
+      mlName = arr[1]
+      numClusters = arr[2]
+      sd = arr[3]
+      area = arr[4]
+      bound = arr[5:10]
+      centroid = arr[10:16]
+      convex_hull_area = arr[16]
+      eccentricity = arr[17]
+      equivalent_diameter = arr[18]
+      euler_number = arr[19]
+      extent = arr[20]
+      inertia = arr[21:27]
+      intensity = arr[27:37]
+      label = arr[37]
+      major_axis = arr[38]
+      minor_axis = arr[39]
+      moments = arr[40:108]
+      orientation = arr[108]
+      perimeter = arr[109]
+      shannon_entropy = arr[110:113]
+      solidity = arr[113]
+      moments_zernike = arr[114:139]
+      threshold_adjacency_statistics = arr[139:193]
+      local_binary_patterns = arr[193:207]
+      haralick = arr[207:259]
+      image = arr[259]
+      mlQuery = """
+                  typeML: {
+                      ml: "kmeans"
+                      numClusters: """ + str(numClusters) + """
+                      sd: """ + str(sd) + """
+                      },
+                  """ 
+    
+    if(typeML == "randomForest"):
+      classification = arr[0]
+      mlName = arr[1]
+      error = arr[2]
+      area = arr[3]
+      bound = arr[4:9]
+      centroid = arr[9:15]
+      convex_hull_area = arr[15]
+      eccentricity = arr[16]
+      equivalent_diameter = arr[17]
+      euler_number = arr[18]
+      extent = arr[19]
+      inertia = arr[20:26]
+      intensity = arr[26:36]
+      label = arr[36]
+      major_axis = arr[37]
+      minor_axis = arr[38]
+      moments = arr[39:107]
+      orientation = arr[107]
+      perimeter = arr[108]
+      shannon_entropy = arr[109:112]
+      solidity = arr[112]
+      moments_zernike = arr[113:138]
+      threshold_adjacency_statistics = arr[138:192]
+      local_binary_patterns = arr[192:206]
+      haralick = arr[206:258]
+      image = arr[258]
+      mlQuery = """
+                  typeML: {
+                      ml: "randomForest"
+                      error: """ + str(error) + """
+                      },
+                  """ 
 
-    newCell = Cell(image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
+    newCell = Cell(classification, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
                    extent,
                    inertia, intensity, label, major_axis, minor_axis, moments, orientation, perimeter, shannon_entropy,
                    solidity, moments_zernike, threshold_adjacency_statistics, local_binary_patterns, haralick)
@@ -572,6 +554,8 @@ def one_cell_original(arr, id):
     query += "image: \"" + str(image) + "\",\n"
     query += "filename: \"" + filenamestr + "\",\n"
     query += "row: " + rowstr + ",\n"
+    query += mlQuery
+    query += "classification: " + str(int(classification)) + ",\n"
     query += "area: " + str(int(area)) + ",\n"
     query += """bound: {
                     area: """ + str(bound[0]) + """,
@@ -901,11 +885,11 @@ def create_cell(file, typeML):
     for i in range(len(df)):
             createcell((i+1), df.iloc[i], file, typeML)
 
-def create_cell_original(file):
+def create_cell_original(file, typeML):
   df = pd.read_csv(file)
   df.dropna(how="all", inplace=True)
   for i in range(len(df)):
-      createcell_original((i+1), df.iloc[i], file)
+      createcell_original((i+1), df.iloc[i], file, typeML)
 
 def getML(arr, typeML):
   if(typeML == "kmeans"):
@@ -1315,6 +1299,7 @@ def findcells(filename, no, current):
                   node {
                     ... on Cell {
                       image
+                      classification
                       area
                       typeML{
                         ml
@@ -1344,7 +1329,7 @@ def findcells(filename, no, current):
                       euler_number
                       extent
                       inertia {
-                          tensor_0_0
+                        tensor_0_0
                         tensor_0_1
                         tensor_1_0
                         tensor_1_1
@@ -1369,14 +1354,14 @@ def findcells(filename, no, current):
                       moments {
                           central {
                               _0_0
-                                _0_1
-                                _0_2
-                                _1_0
-                                _1_1
-                                _1_2
-                                _2_0
-                                _2_1
-                                _2_2
+                              _0_1
+                              _0_2
+                              _1_0
+                              _1_1
+                              _1_2
+                              _2_0
+                              _2_1
+                              _2_2
                           }
                             hu {
                                 _0
@@ -1639,6 +1624,8 @@ def makecell(stringfromquery):
     val = cellDictionary.values()
     keys = cellDictionary.keys()
     cellImage = [cellDictionary["image"]]
+
+    cellClassification = [cellDictionary["classification"]]
 
     cellArea = [cellDictionary["area"]]
 
@@ -2000,8 +1987,13 @@ def makecell(stringfromquery):
     cellHaralickArray += list(cellHaralick180Dictionary.values())
     cellHaralickArray += list(cellHaralick270Dictionary.values())
 
-    newCellCreated = cellArea
-    newCellCreated += cellMLArray + cellBoundArray + cellCentroidArray + cellConvex + cellEccentricity + cellDiameter + cellEuler + cellExtent + cellInertiaArray + cellIntensityArray + cellLabel
+    if(cellMLArray[0] == "kmeans"):
+      cellMLArray = cellMLArray[0:3]
+    else:
+      cellMLArray = cellMLArray[0:1].append(cellMLArray[3:5])
+    
+    newCellCreated = cellClassification + cellMLArray + cellArea
+    newCellCreated += cellBoundArray + cellCentroidArray + cellConvex + cellEccentricity + cellDiameter + cellEuler + cellExtent + cellInertiaArray + cellIntensityArray + cellLabel
     newCellCreated += cellMajor + cellMinor + cellMomentsArray + cellOrientation + cellPerimeter + cellShannonArray
     newCellCreated += cellSolidity + cellZernikeArray + cellThresholdArray + cellPatternsArray + cellHaralickArray + cellImage
 
@@ -2206,7 +2198,40 @@ def deletehelper2(filename, no):
     return client.execute(query)
 
 
-
+def createcell_original(no, arr, filename, typeML):
+  s = str(no)
+  slashloc = str(filename).rfind("/")
+  if(slashloc == -1):
+      slashloc = str(filename).rfind("\\")
+  csvloc = str(filename).rfind(".csv")
+  filenamestr = str(filename)[slashloc+1:csvloc+4]
+  finalid = filenamestr + s
+  print(finalid)
+  onecell = one_cell_original(arr,finalid, typeML)
+  print(onecell)
+  query = gql(
+        """
+        mutation AddCells {
+          upsert(values:{
+            Cell:[
+                {
+                  """         
+          + onecell +
+          """   }
+        ],
+      Filename: [
+      {
+        hypi: {id: \"""" + filenamestr + """\"},
+        csvname: \"""" + filenamestr + """\",
+        totalnumber: """ + s + """
+      }
+      ]
+    }){id}
+  }
+  """
+    )
+  result = client.execute(query)
+  print("done")
 
 
 def createcell(no, arr, filename, typeML):
@@ -2272,4 +2297,4 @@ def createcell(no, arr, filename, typeML):
 # print(retrievecells("dataoutliers.csv"))
 # print(create_cell('C:/Users/paulk/IdeaProjects/skopytest/dataoutliers.csv', "kmeans"))
 # print(getFiles())
-# createFile("dataoutliers.csv", "outputouliers.csv")
+createFile("dataoutliers.csv", "outputouliers.csv")
