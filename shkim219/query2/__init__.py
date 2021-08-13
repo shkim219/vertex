@@ -2297,4 +2297,4 @@ def createcell(no, arr, filename, typeML):
 # print(retrievecells("dataoutliers.csv"))
 # print(create_cell('C:/Users/paulk/IdeaProjects/skopytest/dataoutliers.csv', "kmeans"))
 # print(getFiles())
-createFile("dataoutliers.csv", "outputouliers.csv")
+# createFile("dataoutliers.csv", "outputouliers.csv")

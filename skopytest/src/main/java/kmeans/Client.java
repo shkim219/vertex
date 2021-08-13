@@ -257,7 +257,7 @@ public class Client {
                     valueOfVector[valueOfVector.length - 1] = ids.get((int)(curVector.get(0)));
                     double[] othervalues = vectors.get(i).getData().copyOfRange(1, vectors.get(i).getData().size()).asArray();
                     for (int k = 0; k < othervalues.length; k++) {
-                        valueOfVector[k + 3] = Double.toString(othervalues[k]);
+                        valueOfVector[k + 4] = Double.toString(othervalues[k]);
                     }
                     valueOfVector[0] = "-1";
                     valueOfVector[1] = "kmeans";
