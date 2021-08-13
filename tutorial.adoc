@@ -51,6 +51,7 @@ There are *four* programs that can currently be run: +
 * `+kmeans+`
 * `+randomForest+`
 * `+getoutlierfiles+`
+* `+retrieveML+`
 
 
 We will go over what these methods do +
@@ -250,6 +251,26 @@ Running the code: +
 ----
 {'find': {'edges': []}}
 ----
+
+****
+
+=== retrieveML === 
+
+.retrieveML
+****
+retrieveML will get a file that is in the  machine learning database, and retrieve all of the information that was associated with the file to your local computer. It will be the same format as the inserted file in a csv form
+
+Running the code: + 
+[sidebar]
+`+shkim219 retrieve features.csv example.csv+`
+
+.Example Output
+[source,js]
+----
+ls
+example.csv requirements.txt setup.py shkim219 test.egg-info venv
+----
+where `+example.csv+` is created
 
 ****
 
