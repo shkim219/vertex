@@ -94,7 +94,7 @@ def one_cell(arr, id):
     filenamestr = str(id)[:csvloc+4]
     rowstr = str(id)[csvloc+4:]
 
-        query = "hypi: {id: \"" + str(id) + "\"},\n"
+    query = "hypi: {id: \"" + str(id) + "\"},\n"
     queryFirst = "image: \"" + str(image) + "\",\n"
     queryFirst += "filename: \"" + filenamestr + "\",\n"
     queryFirst += "row: " + rowstr + ",\n"
@@ -2123,7 +2123,7 @@ def createcell(no, arr, filename):
 
 # print(create_cell(skopy_data))
 # createFile("features.csv", "test.csv")
-# print(getFiles())
+print(getFiles()) 
 # print(findcells("features.csv"))
 # while(True):
 #     print(delete())
