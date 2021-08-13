@@ -57,7 +57,7 @@ def one_cell(arr, id, typeML):
         if str(arr[i]) == 'nan':
             arr[i] = " "
     # print(len(arr))
-    if(typeML = "kmeans"):
+    if(typeML == "kmeans"):
       classification = arr[0]
       mlName = arr[1]
       numClusters = arr[2]
@@ -93,7 +93,7 @@ def one_cell(arr, id, typeML):
                       },
                   """ 
     
-    if(typeML = "randomForest"):
+    if(typeML == "randomForest"):
       classification = arr[0]
       mlName = arr[1]
       error = arr[2]
@@ -1320,7 +1320,7 @@ def findcells(filename, no, current):
                         ml
                         numClusters
                         sd
-                        precitedCategory
+                        predictedCategory
                         error
                       }
                       bound {
@@ -2268,5 +2268,6 @@ def createcell(no, arr, filename, typeML):
     print("done")
 
 
-#print(retrievecells("features.csv"))
+# print(retrievecells("dataoutliers.csv"))
 # print(create_cell('C:/Users/paulk/Documents/featuresoutliers.csv', "kmeans"))
+# print(getFiles())

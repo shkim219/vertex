@@ -101,13 +101,17 @@ public class Client {
         else
             fetched = Fetch.fetch(filename);
 
-        try{
-            fetchedTest = Fetch.fetch2(testname);
+        if(Fetch.fetch(testname).size() == 0) {
+            try {
+                fetched = Fetch.fetch2(testname);
+            }
+            catch (FileNotFoundException e){
+                System.out.println("cannot find the file");
+                System.exit(0);
+            }
         }
-        catch (FileNotFoundException e){
-            System.out.println("cannot find the file");
-            System.exit(0);
-        }
+        else 
+            fetched = Fetch.fetch(testname);
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
