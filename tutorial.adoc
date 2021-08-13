@@ -268,3 +268,18 @@ where `+example.csv+` is created
 
 ****
 
+== Things to Note == 
+
+*Current Database* + 
+This database on Hypi.io has to be renewed every month (last updated Aug 11) +
+To change the token: + 
+
+[sidebar]
+`+headers = {'Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJoeXBpLmxvZ2luIjp0cnVlLCJoeXBpLnVzZXJuYW1lIjoic2hraW0yMTlAYnUuZWR1IiwiaHlwaS5lbWFpbCI6InNoa2ltMjE5QGJ1LmVkdSIsImF1ZCI6IjAxRjdWNDE3MFpERFNFWUY4OFZaVDVaNEdGIiwiaWF0IjoxNjI4Njk0OTE2LCJleHAiOjE2MzEyODY5MTYsInN1YiI6IjAxRjdWNDE3MFo0R0NDWllSNVcyTTBKUTA0IiwibmJmIjoxNjI4Njk0OTE2fQ.rELYlvjIMk9MX8POZ8ARy-5jTtUEHrSLa8UGbbmIVWRunNYq4_Eb5ClaBIPCvEcnOCI0x75pT9SfGHyvDwR4Z5FmKj4oRn-M2qe0-nC2W7trx9px1oDobHT8S1j63NvQqD85ZKLj2QqOE1WOOsC8JKprja0GKIlLcwX2LaL_7WSG5eQ52BP9R2MFrPEqeaUjilZQau7FPkwLeQ1hfPds_iPLmY4cBfYaBFAS_bPyZ5a05OlD_UyQFQI5GsHaL8fWsA77icaRo2_MKB5ynQRpvBEB133cupFVlzP-QwyOdCmeJoo6dGiPyN-7C_7w8KntTSH5U1Y0bRGnd421psXZaw',
+           'hypi-domain': 'clamming.apps.hypi.app'}+` +
+
+And change the Authorization for both __init__.py in query and query2. +
+
+*Files it can run on*+
+To run this program, on top of the skopy data that it returns, a new column at the start labeled "classification" must be present, which can be either 1 or 0 depending on whether the cell is categorized as a specific type. +
+
