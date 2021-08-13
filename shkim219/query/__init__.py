@@ -2123,7 +2123,7 @@ def createcell(no, arr, filename):
 
 # print(create_cell(skopy_data))
 # createFile("features.csv", "test.csv")
-print(getFiles()) 
+# print(getFiles()) 
 # print(findcells("features.csv"))
 # while(True):
 #     print(delete())

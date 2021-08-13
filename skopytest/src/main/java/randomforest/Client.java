@@ -81,9 +81,10 @@ public class Client {
             "pathname"};
     public static void main(String... args) throws FileNotFoundException, IOException, InterruptedException {
         String filename = args[0];
-        String testname = args[1];
+        String testname = filename.substring(filename.indexOf(" ") + 1);
+        filename = filename.substring(0,filename.indexOf(" "));
 //        String pathname = args[1];
-//        String filename = "feastures.csv";
+//        String filename = "features.csv";
 //        String testname = "data.csv";
 //        ArrayList<String> fetched = Fetch.fetch(filename, pathname);
 
@@ -103,15 +104,15 @@ public class Client {
 
         if(Fetch.fetch(testname).size() == 0) {
             try {
-                fetched = Fetch.fetch2(testname);
+                fetchedTest = Fetch.fetch2(testname);
             }
             catch (FileNotFoundException e){
                 System.out.println("cannot find the file");
                 System.exit(0);
             }
         }
-        else 
-            fetched = Fetch.fetch(testname);
+        else
+            fetchedTest = Fetch.fetch(testname);
         IgniteConfiguration configuration = new IgniteConfiguration();
         configuration.setClientMode(false);
 
@@ -173,16 +174,11 @@ public class Client {
                         totalAmount++;
                     }
 
-                    //                System.out.println("\n>>> Accuracy " + (1 - amountOfErrors / (double)totalAmount));
-                    /*System.out.println(
-                            ">>> Random Forest multi-class classification algorithm over cached dataset usage example completed."
-                    );*/
                 }
                 for (int j = 0; j < averageErrors.length; j++) {
                     averageErrors[j] /= ((totalAmount * 1.0) / averageErrors.length);
                     averageError += averageErrors[j];
                 }
-//                System.out.println("\n>>> Trainer Error Averages: " + Arrays.toString(averageErrors) + " on " + (totalAmount/averageErrors.length) + " number of data");
                 System.out.println("\n>>> Trainer Error Average: " + averageError + " on " + totalAmount + " number of data");
                 try (QueryCursor<Cache.Entry<Integer, Vector>> observations = testData.query(new ScanQuery<>())) {
                     for (Cache.Entry<Integer, Vector> observation : observations) {
@@ -195,21 +191,8 @@ public class Client {
                         predicted.get(count).add(prediction);
                     }
 
-                    //                System.out.println("\n>>> Accuracy " + (1 - amountOfErrors / (double)totalAmount));
-                    /*System.out.println(
-                            ">>> Random Forest multi-class classification algorithm over cached dataset usage example completed."
-                    );*/
                 }
                 data.clear();
-
-                        /*for (int h = 0; h < 25; h++){
-                            averageAverageVariance += (averageAverageError - variance[h]) * (averageAverageError - variance[h]);
-                        }
-                        averageAverageVariance /= 24;*/
-    //                    long stopTime = System.currentTimeMillis();
-    //                    String timeTaken = Double.toString((stopTime - startTime)/25000.0);
-    //                    System.out.println(i + " with " + timeTaken + " time took for " + Double.toString(averageAverageError));
-    //                    writer.writeNext(new String[]{Integer.toString(i), timeTaken , Double.toString(averageAverageError)});
 
                 //writer.close();
                     count++;
