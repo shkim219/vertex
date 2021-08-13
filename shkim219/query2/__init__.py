@@ -33,7 +33,7 @@ class Cell:
         self.centroid = centroid
         self.convex_hull_area = convex_hull_area
         self.eccentricity = eccentricity
-        self.equivalent_diameter = equivalent_diameterhypi
+        self.equivalent_diameter = equivalent_diameter
         self.euler_number = euler_number
         self.extent = extent
         self.inertia = inertia
@@ -57,31 +57,75 @@ def one_cell(arr, id, typeML):
         if str(arr[i]) == 'nan':
             arr[i] = " "
     # print(len(arr))
-    classification = arr[0]
-    area = arr[1]
-    bound = arr[2:7]
-    centroid = arr[7:13]
-    convex_hull_area = arr[13]
-    eccentricity = arr[14]
-    equivalent_diameter = arr[15]
-    euler_number = arr[16]
-    extent = arr[17]
-    inertia = arr[18:24]
-    intensity = arr[24:34]
-    label = arr[34]
-    major_axis = arr[35]
-    minor_axis = arr[36]
-    moments = arr[37:105]
-    orientation = arr[105]
-    perimeter = arr[106]
-    shannon_entropy = arr[107:110]
-    solidity = arr[110]
-    moments_zernike = arr[111:136]
-    threshold_adjacency_statistics = arr[136:190]
-    local_binary_patterns = arr[190:204]
-    haralick = arr[204:256]
-    image = arr[256]
-
+    if(typeML = "kmeans"):
+      classification = arr[0]
+      mlName = arr[1]
+      numClusters = arr[2]
+      sd = arr[3]
+      area = arr[4]
+      bound = arr[5:10]
+      centroid = arr[10:16]
+      convex_hull_area = arr[16]
+      eccentricity = arr[17]
+      equivalent_diameter = arr[18]
+      euler_number = arr[19]
+      extent = arr[20]
+      inertia = arr[21:27]
+      intensity = arr[27:37]
+      label = arr[37]
+      major_axis = arr[38]
+      minor_axis = arr[39]
+      moments = arr[40:108]
+      orientation = arr[108]
+      perimeter = arr[109]
+      shannon_entropy = arr[110:113]
+      solidity = arr[113]
+      moments_zernike = arr[114:139]
+      threshold_adjacency_statistics = arr[139:193]
+      local_binary_patterns = arr[193:207]
+      haralick = arr[207:259]
+      image = arr[259]
+      mlQuery = """
+                  typeML: {
+                      ml: "kmeans"
+                      numClusters: """ + str(numClusters) + """
+                      sd: """ + str(sd) + """
+                      },
+                  """ 
+    
+    if(typeML = "randomForest"):
+      classification = arr[0]
+      mlName = arr[1]
+      error = arr[2]
+      area = arr[3]
+      bound = arr[4:9]
+      centroid = arr[9:15]
+      convex_hull_area = arr[15]
+      eccentricity = arr[16]
+      equivalent_diameter = arr[17]
+      euler_number = arr[18]
+      extent = arr[19]
+      inertia = arr[20:26]
+      intensity = arr[26:36]
+      label = arr[36]
+      major_axis = arr[37]
+      minor_axis = arr[38]
+      moments = arr[39:107]
+      orientation = arr[107]
+      perimeter = arr[108]
+      shannon_entropy = arr[109:112]
+      solidity = arr[112]
+      moments_zernike = arr[113:138]
+      threshold_adjacency_statistics = arr[138:192]
+      local_binary_patterns = arr[192:206]
+      haralick = arr[206:258]
+      image = arr[258]
+      mlQuery = """
+                  typeML: {
+                      ml: "randomForest"
+                      error: """ + str(error) + """
+                      },
+                  """ 
 
     newCell = Cell(classification, image, area, bound, centroid, convex_hull_area, eccentricity, equivalent_diameter, euler_number,
                    extent,
@@ -96,6 +140,7 @@ def one_cell(arr, id, typeML):
     queryFirst = "image: \"" + str(image) + "\",\n"
     queryFirst += "filename: \"" + filenamestr + "\",\n"
     queryFirst += "row: " + rowstr + ",\n"
+    queryFirst += mlQuery
     queryFirst += "classification: " + str(int(classification)) + ",\n"
     queryFirst += "area: " + str(int(area)) + ",\n"
     querySecond = """bound: {
@@ -854,9 +899,6 @@ def create_cell(file, typeML):
     df = pd.read_csv(file)
     df.dropna(axis =1, how="all", inplace=True)
     for i in range(len(df)):
-        if(i == 0):
-            typeMLChanged = getML(df.iloc[i], typeML)
-        else:
             createcell((i+1), df.iloc[i], file, typeMLChanged)
 
 def create_cell_original(file):
@@ -2028,7 +2070,7 @@ def retrievecells(filename):
 def createFile(inputfile, outputfile):
     rows = retrievecells(inputfile)
     if(rows[0][1] == "kmeans"):
-      fieldnames = ['classification', 'area', 'ml', 'numClusters', 'sd', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
+      fieldnames = ['classification', 'ml', 'numClusters', 'sd', 'area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
                   'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
                   'inertia_tensor_1_0', 'inertia_tensor_1_1', 'inertia_tensor_eigen_values_0', 'inertia_tensor_eigen_values_1', 'intensity_integrated', 'intensity_maximum', 'intensity_mean', 'intensity_median', 'intensity_median_absolute_deviation',
                   'intensity_minimum', 'intensity_quartile_1', 'intensity_quartile_2', 'intensity_quartile_3', 'intensity_standard_deviation', 'label', 'major_axis_length', 'minor_axis_length', 'moments_central_0_0', 'moments_central_0_1',
@@ -2064,7 +2106,7 @@ def createFile(inputfile, outputfile):
                   'haralick_sum_entropy_8_270', 'haralick_entropy_8_270', 'haralick_difference_variance_8_270', 'haralick_difference_entropy_8_270', 'haralick_information_measure_of_correlation_1_8_270', 'haralick_information_measure_of_correlation_2_8_270',
                   'pathname']
     else:
-      fieldnames = ['classification',  'area', 'ml', 'predictedCategory', 'error', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
+      fieldnames = ['classification', 'ml', 'error', 'area', 'bounding_box_area', 'bounding_box_maximum_column', 'bounding_box_maximum_row', 'bounding_box_minimum_column', 'bounding_box_minimum_row', 'centroid_column', 'centroid_row', 'centroid_weighted_column',
                   'centroid_weighted_local_column', 'centroid_weighted_local_row', 'centroid_weighted_row', 'convex_hull_area', 'eccentricity', 'equivalent_diameter', 'euler_number', 'extent', 'inertia_tensor_0_0', 'inertia_tensor_0_1',
                   'inertia_tensor_1_0', 'inertia_tensor_1_1', 'inertia_tensor_eigen_values_0', 'inertia_tensor_eigen_values_1', 'intensity_integrated', 'intensity_maximum', 'intensity_mean', 'intensity_median', 'intensity_median_absolute_deviation',
                   'intensity_minimum', 'intensity_quartile_1', 'intensity_quartile_2', 'intensity_quartile_3', 'intensity_standard_deviation', 'label', 'major_axis_length', 'minor_axis_length', 'moments_central_0_0', 'moments_central_0_1',
