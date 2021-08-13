@@ -185,25 +185,19 @@ This means that you are now ready to use the machine learning algorithms
 
 .randomForest
 ****
-randomForest will run a random forest algorithm on the input file
+randomForest will run a random forest algorithm on a given correct dataset and run on a file that is yet to be trained
 
 Running the code: + 
 
 [sidebar]
-`+shkim219 randomForest features.csv+`
+`+shkim219 randomForest features.csv data.csv+`
 
 .Example Output
 [source,js]
 ----
-What to predict on?
-1. area
-...
+>>> Error Averages: 0.05091177118212608 on 87 number of data
 
-1
-Analyzing area
->>> Error Averages: [0.05091177118212608] on 629 number of data
-
->>> Combined Error Average: 0.05091177118212608 on 1 number of features on 629 number of data
+>>> Creating file datapredicted.csv...
 ----
 
 ****
