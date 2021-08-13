@@ -192,7 +192,7 @@ def one_cell(arr, id, typeML):
                         _0_1: """ + str(moments[1]) + """,
                         _0_2: """ + str(moments[2]) + """,
                         _1_0: """ + str(moments[3]) + """,
-                                            },
+                                            }
                       },\n"""  
     queryEighth0 = """moments: {
                     central: { 
@@ -201,7 +201,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[6]) + """,
                         _2_1: """ + str(moments[7]) + """,
                         _2_2: """ + str(moments[8]) + """
-                        },
+                        }
                       },\n"""             
     queryEighth1 = """moments: {
                         hu: {
@@ -212,7 +212,7 @@ def one_cell(arr, id, typeML):
                         _4: """ + str(moments[13]) + """,
                         _5: """ + str(moments[14]) + """,
                         _6: """ + str(moments[15]) + """
-                        },
+                        }
                       },\n"""   
     queryEighth2 = """moments: {
                     hu_weighted: {
@@ -223,7 +223,7 @@ def one_cell(arr, id, typeML):
                         _4: """ + str(moments[20]) + """,
                         _5: """ + str(moments[21]) + """,
                         _6: """ + str(moments[22]) + """
-                        },
+                        }
                       },\n"""  
     queryEighth3 = """moments: {               
                     normalized: {
@@ -236,7 +236,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[29]) + """,
                         _2_1: """ + str(moments[30]) + """,
                         _2_2: """ + str(moments[31]) + """
-                        },
+                        }
                       },\n"""   
     queryEighth4 = """moments: {
                     spatial: {
@@ -249,7 +249,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(int(moments[38])) + """,
                         _2_1: """ + str(int(moments[39])) + """,
                         _2_2: """ + str(int(moments[40])) + """
-                        },
+                        }
                       },\n"""   
     queryEighth5 = """moments: {
                     weighted_central: {
@@ -262,7 +262,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[47]) + """,
                         _2_1: """ + str(moments[48]) + """,
                         _2_2: """ + str(moments[49]) + """
-                        },
+                        }
                       },\n"""
     queryEighth6 = """moments: {   
                     weighted_normalized: {
@@ -275,7 +275,7 @@ def one_cell(arr, id, typeML):
                         _2_0: """ + str(moments[56]) + """,
                         _2_1: """ + str(moments[57]) + """,
                         _2_2: """ + str(moments[58]) + """
-                        },
+                        }
                       },\n"""  
     queryEighth7 = """moments: { 
                     weighted_spatial: {
@@ -897,9 +897,9 @@ def one_cell_original(arr, id):
 
 def create_cell(file, typeML):
     df = pd.read_csv(file)
-    df.dropna(axis =1, how="all", inplace=True)
+    df.dropna(how="all", inplace=True)
     for i in range(len(df)):
-            createcell((i+1), df.iloc[i], file, typeMLChanged)
+            createcell((i+1), df.iloc[i], file, typeML)
 
 def create_cell_original(file):
   df = pd.read_csv(file)
@@ -1642,7 +1642,7 @@ def makecell(stringfromquery):
 
     cellArea = [cellDictionary["area"]]
 
-    cellML = [cellDictionary["typeML"]]
+    cellML = cellDictionary["typeML"]
     cellMLDictionary = eval(str(cellML))
     cellMLArray = list(cellMLDictionary.values())
 
@@ -2260,8 +2260,9 @@ def createcell(no, arr, filename, typeML):
         }){id}
       }
       """)
+      # print(queries)
       resultUpdate = client.execute(query2)
-      print("donePartly")
+      # print("donePartly")
         
     #print(onecell)
     
@@ -2269,5 +2270,6 @@ def createcell(no, arr, filename, typeML):
 
 
 # print(retrievecells("dataoutliers.csv"))
-# print(create_cell('C:/Users/paulk/Documents/featuresoutliers.csv', "kmeans"))
+# print(create_cell('C:/Users/paulk/IdeaProjects/skopytest/dataoutliers.csv', "kmeans"))
 # print(getFiles())
+# createFile("dataoutliers.csv", "outputouliers.csv")
